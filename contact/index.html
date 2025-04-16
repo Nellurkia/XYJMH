@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>血友姐妹会</title>
+    <style>
+    /* 重置样式 */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: sans-serif;
+      padding: 0;
+      margin: 0;
+      background-color: #f4f4f4;
+      width: 100%;
+      overflow-x: hidden;
+    }
+
+    /* 顶部导航栏样式 */
+    .top-nav {
+      width: 100%;
+      background-color: #fff;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .logo-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 20px;
+      background-color: #f8f9fa;
+      border-bottom: 1px solid #eee;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-img {
+      height: 40px;
+      width: auto;
+    }
+
+    .logo-text {
+      font-size: 24px;
+      font-weight: bold;
+      color: #e91e63;
+    }
+
+    .language-select {
+      padding: 5px 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      background-color: white;
+      cursor: pointer;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 20px;
+      background-color: #fff;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .nav-links a {
+      color: #333;
+      text-decoration: none;
+      padding: 5px 10px;
+      border-radius: 4px;
+      transition: background-color 0.3s;
+    }
+
+    .nav-links a:hover {
+      background-color: #f0f0f0;
+      color: #e91e63;
+    }
+
+    /* 下拉菜单样式 */
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background-color: #fff;
+      min-width: 160px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      border-radius: 4px;
+      z-index: 1100;
+    }
+
+    .dropdown-content a {
+      color: #333;
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+      text-align: left;
+    }
+
+    .dropdown-content a:hover {
+      background-color: #f0f0f0;
+      color: #e91e63;
+    }
+
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+
+    /* QR Code Popup Styles */
+    .nav-link-container {
+      position: relative; /* Needed for absolute positioning of the popup */
+      display: inline-block; /* Keep links inline but allow relative positioning */
+    }
+
+    .qr-popup {
+      display: none; /* Hidden by default */
+      position: absolute;
+      top: 100%; /* Position below the link */
+      left: 50%;
+      transform: translateX(-50%); /* Center horizontally */
+      margin-top: 5px; /* Space between link and popup */
+      background-color: white;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+      text-align: center;
+      z-index: 1100; /* Ensure it's above other content */
+      white-space: nowrap; /* Prevent wrapping */
+    }
+
+    .qr-popup img {
+      display: block;
+      max-width: 100px; /* Adjust size as needed */
+      height: auto;
+      margin-bottom: 5px;
+    }
+
+    .qr-popup span {
+      font-size: 12px;
+      color: #555;
+    }
+
+    /* Show popup on hover */
+    .nav-link-container:hover .qr-popup {
+      display: block;
+    }
+
+    /* 联系方式区域样式 */
+    .contact-section {
+      width: 100%;
+      max-width: 1200px;
+      margin: 20px auto;
+      padding: 10px;
+    }
+
+    .contact-title {
+      text-align: center;
+      color: #333;
+      margin-bottom: 20px;
+      font-size: 24px;
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      padding: 10px;
+      width: 100%;
+    }
+
+    .contact-card {
+      background: white;
+      border-radius: 10px;
+      padding: 15px;
+      text-align: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+      width: 100%;
+    }
+
+    .contact-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .contact-card img {
+      width: 100%;
+      max-width: 150px;
+      height: auto;
+      aspect-ratio: 1;
+      margin-bottom: 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    .contact-card img:hover {
+      transform: scale(1.05);
+    }
+
+    .contact-card h3 {
+      color: #e91e63;
+      margin-bottom: 10px;
+    }
+
+    .contact-card p {
+      color: #666;
+      margin: 5px 0;
+    }
+
+    .contact-card a {
+      color: #e91e63;
+      text-decoration: none;
+      display: inline-block;
+      margin-top: 10px;
+    }
+
+    .contact-card a:hover {
+      text-decoration: underline;
+    }
+
+    /* 二维码放大弹窗样式 */
+    .qr-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.9);
+      z-index: 2000;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      padding: 20px;
+    }
+
+    .qr-modal.active {
+      display: flex;
+    }
+
+    .qr-modal img {
+      max-width: 90%;
+      max-height: 80vh;
+      width: auto;
+      height: auto;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .save-button {
+      margin-top: 20px;
+      padding: 12px 24px;
+      background-color: #e91e63;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    @media (max-width: 768px) {
+      .contact-section {
+        margin: 10px auto;
+        padding: 5px;
+      }
+
+      .contact-title {
+        font-size: 20px;
+        margin-bottom: 15px;
+      }
+
+      .contact-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        padding: 5px;
+      }
+
+      .contact-card {
+        padding: 10px;
+      }
+
+      .contact-card img {
+        max-width: 120px;
+      }
+
+      .contact-card h3 {
+        font-size: 14px;
+        margin-bottom: 5px;
+      }
+
+      .contact-card p {
+        font-size: 12px;
+        margin: 3px 0;
+      }
+
+      .qr-modal {
+        padding: 10px;
+      }
+
+      .qr-modal img {
+        max-width: 95%;
+      }
+
+      .save-button {
+        padding: 10px 20px;
+        font-size: 14px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .contact-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+      }
+
+      .contact-card {
+        padding: 8px;
+      }
+
+      .contact-card img {
+        max-width: 100px;
+      }
+    }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <nav class="top-nav">
+      <div class="logo-bar">
+        <div class="logo-container">
+          <img src="logo.png" alt="血友姐妹会" class="logo-img">
+          <a href="http://47.122.118.186/home" style="text-decoration: none;"><span class="logo-text">血友姐妹会</span></a>
+        </div>
+        <select class="language-select" onchange="changeLanguage(this.value)">
+          <option value="zh">中文</option>
+          <option value="en">English</option>
+        </select>
+      </div>
+      <div class="nav-links">
+        <a href="http://47.122.118.186/home">主页</a>
+        <div class="dropdown">
+          <a href="#">科普</a>
+          <div class="dropdown-content">
+            <a href="http://47.122.118.186/education">科普图文</a>
+            <a href="http://47.122.118.186/video">视频播放</a>
+            <a href="http://47.122.118.186/file">资料下载</a>
+          </div>
+        </div>
+        <a href="http://47.122.118.186/map">检测地图</a>
+        <div class="nav-link-container">
+          <a href="https://lxi.me/3Xr9Bq">问卷跳转</a>
+          <div class="qr-popup">
+            <img src="qrcode.png" alt="问卷二维码">
+            <span>可扫码</span>
+          </div>
+        </div>
+        <a href="http://47.122.118.186/period">月经估算</a>
+        <a href="http://47.122.118.186/news">新闻</a>
+        <a href="http://47.122.118.186/contact">联系方式</a>
+      </div>
+    </nav>
+  
+    <!-- 添加语言切换功能的脚本 -->
+    <script>
+      function changeLanguage(lang) {
+        console.log('Language changed to:', lang);
+        // TODO: 实现具体的语言切换逻辑，例如加载不同的文本资源
+      }
+    </script>
+
+    <!-- 二维码放大弹窗 -->
+    <div class="qr-modal" id="qrModal">
+      <img id="modalImage" src="" alt="放大的二维码">
+      <button class="save-button" onclick="saveQRCode()">保存二维码</button>
+    </div>
+
+    <!-- 联系方式内容区域 -->
+    <div class="contact-section">
+      <h2 class="contact-title">联系我们</h2>
+      <div class="contact-grid">
+        <div class="contact-card">
+          <img src="codes/wechatgzh-qr.png" alt="微信公众号二维码">
+          <h3>微信公众号</h3>
+          <p>南昌血友之家</p>
+          <p>微信扫码</p>
+        </div>
+        
+        <div class="contact-card">
+          <img src="codes/wechatsph-qr.png" alt="微信公众号二维码">
+          <h3>微信视频号</h3>
+          <p>WGH38417关爱女性血友病</p>
+          <p>微信扫码</p>
+        </div>
+
+        <div class="contact-card">
+          <img src="codes/wechat-qr.png" alt="微信二维码">
+          <h3>微信</h3>
+          <p>wgh38417</p>
+          <p>合作请私信</p>
+        </div>
+
+        <div class="contact-card">
+          <img src="codes/wechatgroup-qr.png" alt="微信群二维码">
+          <h3>微信群聊</h3>
+          <p>全国女性血友病互助群</p>
+          <p>扫码入群（如失效请加微信wgh38417）</p>
+        </div>
+
+        <div class="contact-card">
+          <img src="codes/bilibili-qr.png" alt="哔哩哔哩二维码">
+          <h3>哔哩哔哩</h3>
+          <p>血友姐妹会</p>
+          <p>b站扫码</p>
+        </div>
+
+        
+        <div class="contact-card">
+          <img src="codes/xiaohongshu-qr.png" alt="小红书二维码">
+          <h3>小红书</h3>
+          <p>关爱女性血友病</p>
+          <p>小红书扫码</p>
+        </div>
+
+        <div class="contact-card">
+          <img src="codes/douyin-qr.png" alt="抖音号二维码">
+          <h3>抖音</h3>
+          <p>WGH38417</p>
+          <p>抖音扫描二维码</p>
+        </div>
+        
+
+        <div class="contact-card">
+          <img src="codes/mail-qr.png" alt="邮箱二维码">
+          <h3>邮箱</h3>
+          <p>wgh38417@163.com</p>
+          <p>合作请发邮件</p>
+        </div>
+
+
+
+      </div>
+    </div>
+
+    <script>
+      // 获取所有二维码图片
+      const qrImages = document.querySelectorAll('.contact-card img');
+      const modal = document.getElementById('qrModal');
+      const modalImg = document.getElementById('modalImage');
+
+      // 为每个二维码图片添加点击事件
+      qrImages.forEach(img => {
+        img.addEventListener('click', function() {
+          modalImg.src = this.src;
+          modal.classList.add('active');
+        });
+      });
+
+      // 点击弹窗背景关闭弹窗
+      modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+          modal.classList.remove('active');
+        }
+      });
+
+      // 保存二维码图片
+      function saveQRCode() {
+        const link = document.createElement('a');
+        link.download = '二维码.png';
+        link.href = modalImg.src;
+        link.click();
+      }
+
+      // 移动端长按保存
+      qrImages.forEach(img => {
+        img.addEventListener('contextmenu', function(e) {
+          e.preventDefault();
+        });
+      });
+    </script>
+</body>
+</html>
