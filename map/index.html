@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>愿意为血友病患者注射的诊所或医院</title>
+    <style>
+    /* 顶部导航栏样式 */
+    .top-nav {
+      width: 100%;
+      background-color: #fff;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .logo-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 20px;
+      background-color: #f8f9fa;
+      border-bottom: 1px solid #eee;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-img {
+      height: 40px;
+      width: auto;
+    }
+
+    .logo-text {
+      font-size: 24px;
+      font-weight: bold;
+      color: #e91e63;
+    }
+
+    .language-select {
+      padding: 5px 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      background-color: white;
+      cursor: pointer;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 20px;
+      background-color: #fff;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .nav-links a {
+      color: #333;
+      text-decoration: none;
+      padding: 5px 10px;
+      border-radius: 4px;
+      transition: background-color 0.3s;
+    }
+
+    .nav-links a:hover {
+      background-color: #f0f0f0;
+      color: #e91e63;
+    }
+
+    /* 下拉菜单样式 */
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background-color: #fff;
+      min-width: 160px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      border-radius: 4px;
+      z-index: 1100;
+    }
+
+    .dropdown-content a {
+      color: #333;
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+      text-align: left;
+    }
+
+    .dropdown-content a:hover {
+      background-color: #f0f0f0;
+      color: #e91e63;
+    }
+
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+
+    /* QR Code Popup Styles */
+    .nav-link-container {
+      position: relative; /* Needed for absolute positioning of the popup */
+      display: inline-block; /* Keep links inline but allow relative positioning */
+    }
+
+    .qr-popup {
+      display: none; /* Hidden by default */
+      position: absolute;
+      top: 100%; /* 改为 top: 100% 使其显示在链接下方 */
+      left: 50%;
+      transform: translateX(-50%); /* Center horizontally */
+      margin-top: 5px; /* 改为 margin-top 添加与链接的间距 */
+      background-color: white;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+      text-align: center;
+      z-index: 1100; /* Ensure it's above other content */
+      white-space: nowrap; /* Prevent wrapping */
+    }
+
+    .qr-popup img {
+      display: block;
+      max-width: 100px; /* Adjust size as needed */
+      height: auto;
+      margin-bottom: 5px;
+    }
+
+    .qr-popup span {
+      font-size: 12px;
+      color: #555;
+    }
+
+    /* Show popup on hover */
+    .nav-link-container:hover .qr-popup {
+      display: block;
+    }
+
+    /* 重置 body 样式 */
+    body {
+        font-family: sans-serif;
+        padding: 0;
+        margin: 0;
+        background-color: #f4f4f4; /* 添加浅灰色背景 */
+    }
+    
+    /* 主内容容器 */
+    .content-wrapper {
+        max-width: 1200px; /* 增加最大宽度 */
+        margin: 20px auto; /* 上下边距，左右居中 */
+        padding: 0 20px; /* 左右内边距 */
+        box-sizing: border-box;
+    }
+
+    /* 控制和信息区域 */
+    .controls-info {
+        background-color: #fff;
+        padding: 15px 20px;
+        margin-bottom: 20px;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    #citySelector label {
+        margin-right: 10px;
+    }
+
+    #citySelector select {
+        padding: 5px 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    #info p {
+        margin: 10px 0;
+        font-size: 14px;
+        color: #555;
+        line-height: 1.6;
+    }
+    #info p:last-child {
+        margin-bottom: 0;
+    }
+
+    /* 地图和列表容器 */
+    .map-list-container {
+        display: flex;
+        gap: 20px; /* 地图和列表之间的间隙 */
+    }
+
+    /* 地图容器样式 */
+    #mapContainer { 
+        flex: 2; /* 占据大约 2/3 宽度 */
+        height: 600px; 
+        border-radius: 8px;
+        overflow: hidden; /* 确保圆角生效 */
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    /* 距离列表容器样式 */
+    #distanceList { 
+        flex: 1; /* 占据大约 1/3 宽度 */
+        height: 600px; 
+        overflow-y: auto; 
+        background-color: #fff;
+        border-radius: 8px;
+        padding: 15px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        box-sizing: border-box;
+    }
+
+    #distanceList h2 { 
+        font-size: 18px; 
+        margin: 0 0 15px 0; /* 调整标题边距 */
+        color: #333;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 10px;
+    }
+    
+    #nearestLocation {
+        background-color: #e9f5ff;
+        border: 1px solid #cce5ff;
+        color: #004085;
+        padding: 10px;
+        border-radius: 4px;
+        margin-bottom: 15px;
+        font-size: 14px;
+    }
+    #nearestLocation strong {
+        font-weight: bold;
+    }
+
+    #distanceList ul { 
+        list-style-type: none; 
+        padding: 0; 
+        margin: 0;
+    }
+
+    #distanceList li { 
+        padding: 10px 5px; /* 增加列表项内边距 */
+        border-bottom: 1px solid #eee; /* 添加分隔线 */
+        font-size: 14px;
+        color: #444;
+    }
+    #distanceList li:last-child {
+        border-bottom: none; /* 最后一个移除分隔线 */
+    }
+
+    /* 移动端适配 */
+    @media (max-width: 768px) {
+        .content-wrapper {
+            margin: 10px auto;
+            padding: 0 10px;
+        }
+
+        .controls-info {
+            padding: 10px 15px;
+            margin-bottom: 15px;
+        }
+
+        #citySelector {
+            display: flex; /* 让 label 和 select 在一行 */
+            align-items: center;
+        }
+        #citySelector select {
+            flex: 1; /* 让 select 占据剩余空间 */
+        }
+        
+        #info p {
+            font-size: 13px;
+        }
+
+        .map-list-container {
+            flex-direction: column; /* 改为垂直布局 */
+            gap: 15px;
+        }
+
+        #mapContainer, #distanceList {
+            flex: none; /* 取消 flex 比例 */
+            width: 100%;  /* 宽度占满 */
+        }
+
+        #mapContainer {
+            height: 400px; /* 调整地图高度 */
+        }
+
+        #distanceList {
+            height: auto; /* 高度自适应 */
+            max-height: 400px; /* 限制最大高度，仍可滚动 */
+            padding: 10px;
+        }
+        #distanceList h2 {
+            font-size: 16px;  /* 调整标题字体大小 */
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+        }
+        #nearestLocation {
+            font-size: 13px;
+        }
+        #distanceList li {
+            font-size: 13px;
+            padding: 8px 5px;
+        }
+
+        .logo-bar {
+          padding: 10px;
+        }
+
+        .logo-img {
+          height: 30px;
+        }
+
+        .logo-text {
+          font-size: 18px;
+        }
+
+        .nav-links {
+          padding: 5px;
+          gap: 10px;
+          font-size: 14px;
+        }
+        
+        .dropdown-content {
+          min-width: 140px;
+        }
+    }
+    
+    /* 原有样式 */
+    /* 移除不再需要的样式，例如 float 和 border-left */
+
+    </style>
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <nav class="top-nav">
+      <div class="logo-bar">
+        <div class="logo-container">
+          <img src="logo.png" alt="血友姐妹会" class="logo-img"> <!-- 注意修改logo路径 -->
+          <a href="http://47.122.118.186/home" style="text-decoration: none;"><span class="logo-text">血友姐妹会</span></a>
+          
+        </div>
+        <select class="language-select" onchange="changeLanguage(this.value)">
+          <option value="zh">中文</option>
+          <option value="en">English</option>
+        </select>
+      </div>
+      <div class="nav-links">
+        <a href="http://47.122.118.186/home">主页</a>
+        <div class="dropdown">
+          <a href="#">科普</a>
+          <div class="dropdown-content">
+            <a href="http://47.122.118.186/education">科普图文</a>
+            <a href="http://47.122.118.186/video">视频播放</a>
+            <a href="http://47.122.118.186/file">资料下载</a>
+          </div>
+        </div>
+        <a href="http://47.122.118.186/map">检测地图</a>
+        <div class="nav-link-container">
+          <a href="https://lxi.me/3Xr9Bq">问卷跳转</a>
+          <div class="qr-popup">
+            <img src="qrcode.png" alt="问卷二维码"> <!-- Adjusted path -->
+            <span>可扫码</span>
+          </div>
+        </div>
+        <a href="http://47.122.118.186/period">月经估算</a>
+        <a href="http://47.122.118.186/news">新闻</a>
+        <a href="http://47.122.118.186/contact">联系方式</a>
+      </div>
+    </nav>
+  
+    <!-- 添加语言切换功能的脚本 (如果需要实际功能，需实现) -->
+    <script>
+      function changeLanguage(lang) {
+        console.log('Language changed to:', lang);
+        // TODO: 实现具体的语言切换逻辑，例如加载不同的文本资源
+      }
+    </script>
+
+    <!-- 主内容区域 -->
+    <div class="content-wrapper">
+      <!-- 控制和信息区域 -->
+      <div class="controls-info">
+        <!-- 城市选择器 -->
+        <div id="citySelector">
+            <label for="city">选择您的省市：</label>
+            <select id="city" onchange="changeCity()">
+                <option value="南昌市">江西省南昌市</option>
+                <option value="九江市">江西省九江市</option>
+                <option value="新余市">江西省新余市</option>
+                <option value="丰城市">江西省丰城市</option>
+                <option value="抚州市">江西省抚州市</option>
+                <option value="赣州市">江西省赣州市</option>
+                <option value="宜春市">江西省宜春市</option>
+                <option value="鹰潭市">江西省鹰潭市</option>
+                <option value="上饶市">江西省上饶市</option>
+                <option value="吉安市">江西省吉安市</option>
+                <option value="萍乡市">江西省萍乡市</option>
+                <option value="高安市">江西省高安市</option>
+                <option value="景德镇市">江西省景德镇市</option>
+                <option value="无锡市">江苏省无锡市</option>
+                <option value="东台市">江苏省东台市</option>
+                <option value="盐城市">江苏省盐城市</option>
+                <option value="常州市">江苏省常州市</option>
+                <option value="淮安市">江苏省淮安市</option>
+                <option value="宁德市">福建省宁德市</option>
+                <option value="龙岩市">福建省龙岩市</option>
+                <option value="东莞市">广东省东莞市</option>
+                <option value="杭州市">浙江省杭州市</option>
+                <option value="湖州市">浙江省湖州市</option>
+                <option value="济南市">山东省济南市</option>
+                <option value="东营市">山东省东营市</option>
+                <option value="临沂市">山东省临沂市</option>
+                <option value="淄博市">山东省淄博市</option>
+                <option value="淄博市">山东省菏泽市</option>
+                <option value="唐山市">河北省唐山市</option>
+                <option value="西宁市">青海省西宁市</option>
+                <option value="银川市">宁夏省银川市</option>
+                <option value="梅州市">广东省梅州市</option>
+                <option value="南宁市">山西省南宁市</option>
+                <option value="广州市">广州市</option>
+                <option value="上海市">上海市</option>
+                <option value="成都市">成都市</option>
+            </select>
+        </div>
+
+        <!-- 文字说明区域 -->
+        <div id="info">
+            <p>我们会自动尝试获取您的当前定位，并显示离定位最近的诊所；如果定位失败，您可以手动选择所在地，则会显示离该城市中心最近的诊所。</p>
+            <p>部分地点可能有偏差，建议使用其他地图导航软件（高德地图、百度地图、腾讯地图等）辅助，并提前拨打该诊所电话确认。</p>
+            <p>本地图由南昌市血之友公益协会制作，旨在满足血友朋友的需求。邮箱：wgh38417@163.com，欢迎投稿和校正地点。</p>
+        </div>
+      </div>
+
+      <!-- 地图和列表容器 -->
+      <div class="map-list-container">
+        <!-- 地图容器 -->
+        <div id="mapContainer"></div>
+        <!-- 距离列表容器 -->
+        <div id="distanceList">
+            <h2>离您最近的诊所或医院是：</h2>
+            <div id="nearestLocation"></div>
+            <ul id="distanceUl"></ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- 配置高德地图的安全密钥 -->
+    <script type="text/javascript">
+        window._AMapSecurityConfig = {
+            securityJsCode: "0854475160df95a7068faef69115f2b4", // 替换成你的安全密钥
+        };
+    </script>
+
+    <!-- 加载高德地图API -->
+    <script
+        type="text/javascript"
+        src="https://webapi.amap.com/maps?v=2.0&key=5b486848a482bd35af8f514b37f161aa"> <!-- 替换成你的key -->
+    </script>
+
+
+    <script>
+        // 初始化地图
+        var map = new AMap.Map('mapContainer', {
+            zoom: 12
+        });
+
+        // 定义位置：医院列表
+        var locations = [
+           //武汉市
+            { name: '武汉市同济医院', coords: [114.332, 30.577] },
+            { name: '武汉市协和医院', coords: [114.295, 30.575] },
+            //上海市
+            {name:'奉贤区金钱公路4999私人诊所',coords:[121.551003,30.875373]},
+            // 南昌市">江西省南昌市：
+            {name:'南昌市新建区双港地铁站附近楼立新诊所',coords:[115.865367,28.748556]},
+            {name:'南昌市南昌县奥林匹克花园诊所',coords:[115.891,28.600058]},
+            {name:'南昌市进贤县温圳镇章新华中医诊所',coords:[116.279336,28.373203]},
+            {name:'南昌市高新区昌东大道鱼尾村卫生室',coords:[116.020745,28.721593]},
+            {name:'南昌市进贤县南湾村卫生健康服务室',coords:[116.132345,28.293671]},
+            {name:'南昌市进贤县温圳镇中心卫生院发热门诊',coords:[116.091076,28.344573]},
+            {name:'南昌市进贤县文港镇卫生院',coords:[116.121336,28.289126]},
+            {name:'南昌市新建区经开区左华诊所',coords:[115.847433,28.740055]},
+            {name:'南昌市南昌县莲塘镇樊哲保诊所',coords:[115.891,28.600058]},
+            {name:'南昌市青山湖区罗家镇濡溪村三联路口诊所',coords:[116.023137,28.662072]},
+            {name:'南昌市南昌县邓埠西路李丽君诊所',coords:[115.893032,28.590729]},
+            {name:'南昌市南昌县金沙二路存德诊所',coords:[115.886825,28.589636]},
+            {name:'南昌市新建区经开汇泉诊所(皇姑路店) ',coords:[115.870865,28.759236]},
+            {name:'南昌市新建区双港楼立新诊所 ',coords:[115.865367,28.748556]},
+            {name:'南昌市青山湖区创新一路南塘村卫生所',coords:[115.998094,28.675277]},
+            //九江市
+            {name:'九江市庐山市和公塘村委会燕妮健康诊所',coords:[115.980863,29.306313]},
+            {name:'九江市庐山市南阳畈村委会杏林驿站旁诊所',coords:[115.980863,29.308132]},
+            {name:'九江市修水县修水县福湾村卫生所 ',coords:[114.531908,29.003098]},
+            {name:'九江市浔阳区龙开河社区卫生服务站 ',coords:[115.985282,29.727474]},
+            {name:'九江市修水县上杭乡卫生院',coords:[114.460263,29.112008]},
+            //新余市
+            {name:'新余市渝水区青年路何医师中医诊所',coords:[114.923535,27.823579]},
+            {name:'新余市渝水区青年路燕子山陈医生诊所',coords:[114.921046,27.818807]},
+            {name:'新余市渝水区仙来西大道刘杏芳中医诊所',coords:[114.904191,27.821848]},
+            // 丰城市">江西省丰城市：
+            {name:'丰城市东方红大街136号丰城市中医院',coords:[115.798108,28.204349]},
+            {name:'丰城市拖船中心卫生院',coords:[115.670766,28.15344,]},
+            {name:'丰城市涂雪花卫生室',coords:[115.80655 ,28.165513]},
+            // 抚州市
+            {name:'抚州市金溪县琅琚中心卫生院门诊',coords:[116.657027,27.875209]},
+            {name:'抚州市崇仁县相山镇医院',coords:[116.041769,27.557685]},
+            {name:'抚州市崇仁县河上镇河上村卫生健康服务室 ',coords:[116.014285,27.863724]},
+
+            {name:'抚州市临川区笠上村卫生室 ',coords:[116.325895,27.938727]},
+
+            // 赣州市
+            {name:'赣州市瑞金市沙洲坝卫生院',coords:[116.010842,25.885378]},
+            {name:'赣州市于都县贡江镇古田村卫生所',coords:[115.432215,25.977863]},
+            {name:'赣州市于都县古田中路古田诊所',coords:[115.434068,25.960068]},
+            {name:'赣州市宁都县东山坝卫生所',coords:[116.068158,26.742502]},
+            {name:'赣州市信丰县虎山乡龙州村卫生院',coords:[115.077669,25.115384]},
+            {name:'赣州市于都县于都人民医院',coords:[115.411131,25.933265]},
+            {name:'赣州市崇义县中山医院 ',coords:[114.315805,25.699118]},
+            {name:'赣州市兴国县均村乡东方村卫生健康服务室 ',coords:[115.095729,26.409973]},
+            {name:'赣州市兴国县潋江镇澄塘卫生所 ',coords:[115.372212,26.355645]},
+            {name:'赣州市寻乌县水源乡卫生院 ',coords:[115.648545,25.130032]},
+            {name:'赣州市章贡区腊长村诊所 ',coords:[114.949266,25.821843]},
+            {name:'赣州市章贡区绿谷门诊口腔科 ',coords:[114.952964,25.860498]},
+            {name:'赣州市章贡区沙河镇站东诊所 ',coords:[114.947309,25.824284]},
+            {name:'赣州市章贡区沙石镇吉埠新村社区卫生服务站 ',coords:[114.963989,25.81213]},
+            {name:'赣州市章贡区涂发鑫诊所 ',coords:[114.945686,25.831635]},
+
+           ,
+            //宜春市">江西省宜春市：
+            {name:'宜春市奉新县赤岸镇卫生院',coords:[115.380557,28.697357]},
+            {name:'宜春市万载县人民医院',coords:[116.340455, 29.736565]},
+            {name:'宜春市万载阳乐大道邓展胜诊所',coords:[114.457251, 28.115994]},
+            //鹰潭市">江西省鹰潭市：
+            {name:'鹰潭市悦澜湾营销部附近吴爱兵诊所',coords:[117.087848 , 28.271888]},
+            //上饶市">江西省上饶市：
+            {name:'上饶市鄱阳县高家岭车廊卫生所',coords:[116.74258,29.166417]},
+            {name:'上饶市广信区上泸镇振兴街132号卫生院',coords:[117.956676,28.224306]},
+            {name:'上饶市玉山县双明镇阳明路中心卫生院',coords:[118.285215,28.803729]},
+            {name:'上饶市余干县洪家嘴乡卫生院',coords:[116.669835 ,28.701938]},
+            {name:'上饶市玉山县双明镇桥村私人诊所',coords:[118.190456 , 28.633796]},
+            {name:'上饶市广丰区广丰区中医院',coords:[118.194355 , 28.459012]},
+            {name:'上饶市余干东街与上观路张振邦卫生室',coords:[116.845081 , 29.732694]},
+            {name:'上饶市余干县白马桥乡江涛诊所',coords:[115.971692, 29.727846]},
+            {name:'上饶市余干县白马桥乡王源村古唐卫生室',coords:[116.760277, 28.58548]},
+            {name:'上饶市余干县石门村卫生服务室谭海文医生',coords:[116.685131, 28.585478]},
+            {name:'上饶市玉山县冰溪镇卫生院',coords:[118.264297, 28.681422]},
+            {name:'上饶市玉山县怀玉乡中心卫生院',coords:[116.071444, 29.654215]},
+            {name:'上饶市玉山县双明镇老街张传海诊所',coords:[116.348936, 29.739742]},
+            {name:'上饶市玉山县临湖镇卫生院',coords:[117.954503, 28.659141]},
+            {name:'上饶市广丰区交溪村诊所 ',coords:[118.180352,28.342172]},
+            {name:'上饶市信州区纪水仙西医内科诊所 ',coords:[117.991207,28.429398]},
+            {name:'上饶市信州区上饶市车头村卫生室 ',coords:[117.998368,28.427583]},
+            {name:'上饶市余干县洪家嘴乡卫生院 ',coords:[116.669835,28.701938]},
+            {name:'上饶市玉山县冰溪镇卫生院 ',coords:[118.264359,28.681711]},
+
+            //吉安市">江西省吉安市：
+            {name:'吉安市永新县商贸城社区卫生中心',coords:[116.380707,29.946464]},
+            {name:'吉安市永新县湘赣大道红卫桥卫生诊所',coords:[115.971692,29.727846]},
+            {name:'吉安市永新县319永新国道边仰山村委白门斗组(?)',coords:[114.024129,27.049957]},
+            //萍乡市">江西省萍乡市：
+            {name:'萍乡市安源区萍乡汉和医院',coords:[113.873339,27.638729]},
+            {name:'萍乡市莲花县神泉中心卫生院-预防接种门诊',coords:[113.919137,27.054518]},
+            {name:'萍乡市上栗县荆坪村荷花池旁李医生',coords:[113.924987 ,27.947665]},
+            {name:'萍乡市湘东区湘东镇赣西医院急诊科',coords:[113.747308 , 27.637247]},
+            {name:'萍乡市安源区安源镇卫生院 ',coords:[113.89119,27.612579]},
+
+            //高安市">江西省高安市：
+            {name:'高安市石脑镇石脑卫生院',coords:[115.305371,28.397493]},
+            {name:'高安市灰埠镇锦江村金家村',coords:[115.23256 ,28.303521]},
+            //景德镇市">江西省景德镇市：
+            {name:'景德镇市第三人民医院',coords:[117.253096,29.305188]},
+            {name:'景德镇市昌江区余端茂卫生室',coords:[117.206896,29.285737]},
+            
+            //东台市">江苏省东台市：
+            //盐城市">江苏省盐城市：
+            {name:'盐城市东台市五烈镇广山村卫生室',coords:[120.176999,32.800147]},
+
+            //常州市">江苏省常州市：
+            {name:'常州市钟楼区新闸街道社区卫生服务中心',coords:[119.913412,31.83565]},
+
+            //淮安市">江苏省淮安市：
+            {name:'淮安市金湖县福成诊所 ',coords:[119.006892,33.024482]},
+            {name:'淮安市清江浦区杏林居中医综合诊所 ',coords:[119.032273,33.566655]},
+
+            //宁德市">福建省宁德市：
+            {name:'宁德市福安市溪潭镇凤林村卫生所 ',coords:[119.638888,27.028417]},
+
+            //龙岩市">福建省龙岩市：
+
+            //东莞市">广东省东莞市：
+            {name:'东莞市东莞清溪振民第二诊所(鹿湖商业中心)',coords:[114.175108,22.840663]},
+
+            //杭州市">浙江省杭州市：
+            {name:'杭州市钱塘区宋都晨光国际小区门口（电话178l6o48352）',coords:[120.385664,30.290726]},
+            {name:'杭州市上城区浙江省中医院湖滨院区急诊',coords:[120.172308,30.258239]},
+
+            {name:'杭州市西湖区转塘街道社区卫生服务中心(新院区)',coords:[120.080457,30.160766]},
+
+            //湖州市">浙江省湖州市：
+            {name:'湖州市吴兴区王华西医内科诊所',coords:[120.133526,30.884995]},
+            {name:'湖州市长兴县滨海水木花都 ',coords:[119.887474,31.008549]},
+            {name:'湖州市吴兴区王华西医内科诊所 ',coords:[120.133526,30.884995]},
+
+            //东营市">山东省东营市：
+            {name:'东营市东营区东营市人民医院',coords:[118.588463,37.454847]},
+            {name:'东营市垦利区郝家镇宋沙村卫生服务站',coords:[118.581432,37.454847]},
+            {name:'东营市东营区牛庄镇卫生院 ',coords:[118.46961,37.345239]},
+
+            //临沂市">山东省临沂市：
+            {name:'临沂市经开区佃玉综合门诊部（毛屯诊所）',coords:[118.439736,35.048406]},
+            //淄博市">山东省淄博市：
+            {name:'淄博市张店区小庄社区小区内诊所',coords:[118.049615, 36.85915]},
+            //菏泽市">山东省菏泽市：
+            {name:'菏泽市牡丹区菏泽市中医医院 ',coords:[115.377446,35.280741]},
+            {name:'菏泽市牡丹区毛胡同卫生室 ',coords:[115.490529,35.273658]},
+            {name:'菏泽市牡丹区山东省立医院(菏泽医院)-门诊楼 ',coords:[115.311599,35.135594]},
+
+            //唐山市">河北省唐山市：
+            {name:'唐山市丰南区运河东路东湖诊所',coords:[118.088869,39.567739]},
+            {name:'唐山市路北区华北理工大学附属医院 ',coords:[118.184627,39.646593]},
+            {name:'唐山市遵化市北营村小芹诊所 ',coords:[117.856925,40.107668]},
+
+            //西宁市">青海省西宁市：
+            {name:'西宁市城西民康医院',coords:[101.753534,36.646919]},
+            {name:'西宁市城北区宁张路109号西宁北康医院',coords:[101.762601,36.685418]},
+            //梅州市">广东省梅州市：
+            {name:'梅州市五华县河东卫生院公共卫生服务区 ',coords:[115.792651,23.926312]},
+            {name:'梅州市五华县五华县河东镇卫生院 ',coords:[115.789414,23.925377]},
+
+            //济南
+            {name:'济南市莱芜区济南市人民医院(南院区) ',coords:[117.673952,36.244514]},
+            {name:'济南市莱芜区汶水社区卫生服务中心 ',coords:[117.689018,36.207896]},
+            {name:'济南市市中区市中如意诊所(宏瑞国际星城北区店) ',coords:[116.96165,36.631178]},
+
+            //南宁
+            {name:'南宁市西乡塘区桃花源社区卫生服务站 ',coords:[108.316469,22.88118]},
+            //无锡
+            {name:'无锡市惠山区徐红江诊所 ',coords:[120.358269,31.68205]},
+            {name:'无锡市锡山区王正荣诊所 ',coords:[120.353103,31.596917]},
+            //银川
+            {name:'银川市金凤区银川市第二人民医院 ',coords:[106.191284,38.490843]},
+
+        ];
+
+        // 在地图上显示医院位置和名称
+        function addMarkers() {
+            locations.forEach(function(location) {
+                new AMap.Marker({
+                    position: location.coords,
+                    map: map,
+                    title: location.name
+                });
+
+                new AMap.Text({
+                    text: location.name,
+                    anchor: 'center',
+                    position: location.coords,
+                    map: map
+                });
+            });
+        }
+
+// 改变城市的中心点
+function changeCity() {
+            var city = document.getElementById('city').value;
+            var cityCenter = getCityCenter(city);
+            map.setCenter(cityCenter); // 更新地图中心到选中的城市
+
+            // 清空原有医院标记，并重新初始化
+            map.clearMap();
+            addMarkers();
+
+            // 使用选中的城市中心计算并显示距离
+            displayDistances(cityCenter);
+        }
+        // 计算用户到医院的距离并排序
+        function calculateDistances(userCoords) {
+            var distances = [];
+            locations.forEach(function(location) {
+                var distance = AMap.GeometryUtil.distance(userCoords, location.coords);
+                distances.push({ name: location.name, distance: distance });
+            });
+            distances.sort(function(a, b) {
+                return a.distance - b.distance;
+            });
+            return distances;
+        }
+
+        // 显示计算后的距离
+        function displayDistances(userCoords) {
+            var distances = calculateDistances(userCoords);
+            var nearest = distances[0];
+            document.getElementById('nearestLocation').innerHTML = 
+                '<strong>' + nearest.name + '</strong> (' + (nearest.distance / 1000).toFixed(2) + ' km)';
+            var listHTML = '';
+            distances.forEach(function(item) {
+                listHTML += '<li>' + item.name + ': ' + (item.distance / 1000).toFixed(2) + ' km</li>';
+            });
+            document.getElementById('distanceUl').innerHTML = listHTML;
+        }
+
+        // 获取用户的地理位置
+        navigator.geolocation.getCurrentPosition(
+            function(position) {
+                var userCoords = [position.coords.longitude, position.coords.latitude];
+                map.setCenter(userCoords); // 更新地图中心到用户位置
+                new AMap.Marker({
+                    position: userCoords,
+                    map: map,
+                    title: '您的位置'
+                });
+                displayDistances(userCoords);
+            },
+            function(error) {
+                console.error("无法获取用户位置: ", error);
+                alert("获取用户位置失败，您可以手动选择城市。");
+
+                // 默认使用选择的城市中心来排序
+                var city = document.getElementById('city').value;
+                var cityCenter = getCityCenter(city);
+                displayDistances(cityCenter);
+            }
+        );
+
+        // 获取城市的中心坐标
+        function getCityCenter(city) {
+            var cityCenters = {
+                '南昌市':[115.892151,28.676493], 
+                '九江市':[115.992811,29.712034], 
+                '新余市':[114.930835,27.810834], 
+                '丰城市':[115.77114,28.15918], 
+                '抚州市':[116.358351,27.98385], 
+                '赣州市':[114.940278,25.85097], 
+                '宜春市':[114.391136,27.8043], 
+                '鹰潭市':[117.033838,28.238638], 
+                '上饶市':[117.971185,28.44442], 
+                '吉安市':[114.986373,27.111699], 
+                '萍乡市':[113.852186,27.622946], 
+                '高安市':[115.3753,28.4178], 
+                '景德镇市':[117.214664,29.29256], 
+                '无锡市':[120.301663,31.574729], 
+                '东台市':[120.32376,32.85078], 
+                '盐城市':[120.139998,33.377631], 
+                '常州市':[119.946973,31.772752], 
+                '淮安市':[119.021265,33.597506], 
+                '宁德市':[119.527082,26.65924], 
+                '龙岩市':[117.02978,25.091603], 
+                '东莞市':[113.760234,23.048884], 
+                '杭州市':[120.153576,30.287459], 
+                '湖州市':[120.102398,30.867198], 
+                '济南市':[117.000923,36.675807], 
+                '东营市':[118.4963,37.461266], 
+                '临沂市':[118.326443,35.065282], 
+                '淄博市':[118.047648,36.814939], 
+                '唐山市':[118.175393,39.635113], 
+                '西宁市':[101.778916,36.623178], 
+                '银川市':[106.278179,38.46637], 
+                '梅州市':[116.117582,24.299112], 
+                '南宁市':[108.320004,22.82402], 
+                '广州市':[113.280637,23.125178], 
+                '上海市':[121.472644,31.231706], 
+                '成都市':[104.065735,30.659462], 
+
+
+            };
+            return cityCenters[city] || [116.397, 39.916]; // 默认北京坐标
+        }
+
+        // 初始化医院标记
+        addMarkers();
+    </script>
+</body>
+</html>
