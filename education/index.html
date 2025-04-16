@@ -1,0 +1,1404 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>血友姐妹会</title>
+    <style>
+    /* 顶部导航栏样式 */
+    .top-nav {
+      width: 100%;
+      background-color: #fff;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .logo-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 20px;
+      background-color: #f8f9fa;
+      border-bottom: 1px solid #eee;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-img {
+      height: 40px;
+      width: auto;
+    }
+
+    .logo-text {
+      font-size: 24px;
+      font-weight: bold;
+      color: #e91e63;
+    }
+
+    .language-select {
+      padding: 5px 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      background-color: white;
+      cursor: pointer;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 20px;
+      background-color: #fff;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .nav-links a {
+      color: #333;
+      text-decoration: none;
+      padding: 5px 10px;
+      border-radius: 4px;
+      transition: background-color 0.3s;
+    }
+
+    .nav-links a:hover {
+      background-color: #f0f0f0;
+      color: #e91e63;
+    }
+
+    /* 下拉菜单样式 */
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background-color: #fff;
+      min-width: 160px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      border-radius: 4px;
+      z-index: 1100;
+    }
+
+    .dropdown-content a {
+      color: #333;
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+      text-align: left;
+    }
+
+    .dropdown-content a:hover {
+      background-color: #f0f0f0;
+      color: #e91e63;
+    }
+
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+
+    /* QR Code Popup Styles */
+    .nav-link-container {
+      position: relative; /* Needed for absolute positioning of the popup */
+      display: inline-block; /* Keep links inline but allow relative positioning */
+    }
+
+    .qr-popup {
+      display: none; /* Hidden by default */
+      position: absolute;
+      top: 100%; /* Position below the link */
+      left: 50%;
+      transform: translateX(-50%); /* Center horizontally */
+      margin-top: 5px; /* Space between link and popup */
+      background-color: white;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+      text-align: center;
+      z-index: 1100; /* Ensure it's above other content */
+      white-space: nowrap; /* Prevent wrapping */
+    }
+
+    .qr-popup img {
+      display: block;
+      max-width: 100px; /* Adjust size as needed */
+      height: auto;
+      margin-bottom: 5px;
+    }
+
+    .qr-popup span {
+      font-size: 12px;
+      color: #555;
+    }
+
+    /* Show popup on hover */
+    .nav-link-container:hover .qr-popup {
+      display: block;
+    }
+
+    /* 重置 body 样式 */
+    body {
+        font-family: sans-serif;
+        padding: 0;
+        margin: 0;
+        background-color: #f4f4f4; /* 添加浅灰色背景 */
+    }
+    
+    /* 顶部导航栏移动端适配 */
+    @media (max-width: 768px) {
+      .logo-bar {
+        padding: 10px;
+      }
+
+      .logo-img {
+        height: 30px;
+      }
+
+      .logo-text {
+        font-size: 18px;
+      }
+
+      .nav-links {
+        padding: 5px;
+        gap: 10px;
+        font-size: 14px;
+      }
+      
+      .dropdown-content {
+        min-width: 140px;
+      }
+    }
+
+    /* 新闻块样式 */
+    .news-container {
+      max-width: 1200px;
+      margin: 20px auto;
+      padding: 20px;
+    }
+
+    .news-block {
+      background: white;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+    }
+
+    .news-block:hover {
+      transform: translateY(-5px);
+    }
+
+    .news-date {
+      color: #e91e63;
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+
+    .news-title {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #333;
+    }
+
+    .news-content {
+      color: #666;
+      line-height: 1.6;
+      margin-top: 10px;
+    }
+
+    .news-content-hover {
+      display: none;
+    }
+
+    .news-block:hover .news-content-hover {
+      display: block;
+    }
+
+    /* 类型五：直接显示内容的样式 */
+    .news-content-direct {
+      color: #666;
+      line-height: 1.6;
+      margin-top: 10px;
+      padding: 10px;
+      background-color: #f9f9f9;
+      border-radius: 5px;
+      border-left: 4px solid #e91e63;
+    }
+
+    /* 外部链接和二维码样式 */
+    .news-link-container {
+      position: relative;
+      display: inline-block;
+    }
+
+    .news-qr-popup {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      z-index: 1000;
+    }
+
+    .news-link-container:hover .news-qr-popup {
+      display: block;
+    }
+
+    .news-qr-popup img {
+      width: 150px;
+      height: 150px;
+      margin-bottom: 10px;
+    }
+
+    /* 图片展示样式 */
+    .news-images {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .news-images img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    .news-images img:hover {
+      transform: scale(1.05);
+    }
+
+    /* 图片放大弹窗样式 */
+    .image-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.9);
+      z-index: 2000;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      padding: 20px;
+    }
+
+    .image-modal.active {
+      display: flex;
+    }
+
+    .image-modal img {
+      max-width: 90%;
+      max-height: 80vh;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .save-image-button {
+      margin-top: 20px;
+      padding: 12px 24px;
+      background-color: #e91e63;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s;
+    }
+
+    .save-image-button:hover {
+      background-color: #d81b60;
+    }
+
+    /* 类型六：多图片展示样式 */
+    .news-images-many {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .news-images-many img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    .show-more-button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      background-color: #f0f0f0;
+      color: #333;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background-color 0.3s;
+    }
+
+    .show-more-button:hover {
+      background-color: #e0e0e0;
+    }
+
+    .hidden-images {
+      display: none;
+    }
+
+    .hidden-images.show {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .hidden-images img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    .hidden-images img:hover {
+      transform: scale(1.05);
+    }
+
+    /* 视频样式 */
+    .news-video {
+      width: 100%;
+      max-width: 800px;
+      margin: 15px auto;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .news-video video {
+      width: 100%;
+      height: auto;
+    }
+
+    /* 移动端适配 */
+    @media (max-width: 768px) {
+      .news-container {
+        padding: 10px;
+      }
+
+      .news-block {
+        padding: 15px;
+      }
+
+      .news-title {
+        font-size: 16px;
+      }
+
+      .news-images {
+        grid-template-columns: 1fr;
+      }
+
+      .news-images img {
+        height: 180px;
+      }
+
+      .news-qr-popup img {
+        width: 120px;
+        height: 120px;
+      }
+
+      .news-images-many {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .hidden-images.show {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .image-modal img {
+        max-width: 95%;
+      }
+
+      .save-image-button {
+        padding: 10px 20px;
+        font-size: 14px;
+      }
+    }
+
+    /* 类型七：可展开讲述的样式 */
+    .news-story {
+      margin-top: 15px;
+      border: 1px solid #eee;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .story-header {
+      padding: 12px 15px;
+      background-color: #f9f9f9;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background-color 0.3s;
+    }
+
+    .story-header:hover {
+      background-color: #f0f0f0;
+    }
+
+    .story-title {
+      font-size: 16px;
+      color: #333;
+      font-weight: 500;
+    }
+
+    .story-toggle {
+      color: #e91e63;
+      font-size: 14px;
+    }
+
+    .story-content {
+      padding: 15px;
+      background-color: white;
+      display: none;
+      line-height: 1.6;
+      color: #666;
+    }
+
+    .story-content.show {
+      display: block;
+    }
+
+    @media (max-width: 768px) {
+      .story-header {
+        padding: 10px 12px;
+      }
+
+      .story-title {
+        font-size: 14px;
+      }
+
+      .story-content {
+        padding: 12px;
+        font-size: 14px;
+      }
+    }
+
+    /* 类型八：哔哩哔哩视频嵌入样式 */
+    .bilibili-video {
+      width: 100%;
+      max-width: 800px;
+      margin: 15px auto;
+      border-radius: 8px;
+      overflow: hidden;
+      position: relative;
+      padding-bottom: 56.25%; /* 16:9的宽高比 */
+      height: 0;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .bilibili-video iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    @media (max-width: 768px) {
+      .bilibili-video {
+        margin: 10px auto;
+      }
+    }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <nav class="top-nav">
+      <div class="logo-bar">
+        <div class="logo-container">
+          <img src="logo.png" alt="血友姐妹会" class="logo-img">
+          <a href="http://47.122.118.186/home" style="text-decoration: none;"><span class="logo-text">血友姐妹会</span></a>
+        </div>
+        <select class="language-select" onchange="changeLanguage(this.value)">
+          <option value="zh">中文</option>
+          <option value="en">English</option>
+        </select>
+      </div>
+      <div class="nav-links">
+        <a href="http://47.122.118.186/home">主页</a>
+        <div class="dropdown">
+          <a href="#">科普</a>
+          <div class="dropdown-content">
+            <a href="http://47.122.118.186/education">科普图文</a>
+            <a href="http://47.122.118.186/video">视频播放</a>
+            <a href="http://47.122.118.186/file">资料下载</a>
+          </div>
+        </div>
+        <a href="http://47.122.118.186/map">检测地图</a>
+        <div class="nav-link-container">
+          <a href="https://lxi.me/3Xr9Bq">问卷跳转</a>
+          <div class="qr-popup">
+            <img src="qrcode.png" alt="问卷二维码">
+            <span>可扫码</span>
+          </div>
+        </div>
+        <a href="http://47.122.118.186/period">月经估算</a>
+        <a href="http://47.122.118.186/news">新闻</a>
+        <a href="http://47.122.118.186/contact">联系方式</a>
+      </div>
+    </nav>
+  
+    <!-- 添加语言切换功能的脚本 -->
+    <script>
+      function changeLanguage(lang) {
+        console.log('Language changed to:', lang);
+        // TODO: 实现具体的语言切换逻辑，例如加载不同的文本资源
+      }
+    </script>
+
+    <!-- 图片放大弹窗 -->
+    <div class="image-modal" id="imageModal">
+      <img id="modalImage" src="" alt="放大的图片">
+      <button class="save-image-button" onclick="saveImage()">保存图片</button>
+    </div>
+
+    <script>
+      // 等待DOM加载完成
+      document.addEventListener('DOMContentLoaded', function() {
+        // 图片点击放大功能
+        const images = document.querySelectorAll('.news-images img, .news-images-many img, .hidden-images img');
+        const imageModal = document.getElementById('imageModal');
+        const modalImg = document.getElementById('modalImage');
+
+        images.forEach(img => {
+          img.addEventListener('click', function() {
+            modalImg.src = this.src;
+            imageModal.classList.add('active');
+          });
+        });
+
+        // 点击弹窗背景关闭
+        imageModal.addEventListener('click', function(e) {
+          if (e.target === imageModal) {
+            imageModal.classList.remove('active');
+          }
+        });
+
+        // 显示更多图片功能
+        const showMoreButtons = document.querySelectorAll('.show-more-button');
+        showMoreButtons.forEach(button => {
+          button.addEventListener('click', function() {
+            const hiddenImages = this.previousElementSibling;
+            hiddenImages.classList.toggle('show');
+            this.textContent = hiddenImages.classList.contains('show') ? '收起' : '显示更多';
+          });
+        });
+
+        // 故事展开功能
+        const storyHeaders = document.querySelectorAll('.story-header');
+        storyHeaders.forEach(header => {
+          header.addEventListener('click', function() {
+            const content = this.nextElementSibling;
+            content.classList.toggle('show');
+            const toggle = this.querySelector('.story-toggle');
+            toggle.textContent = content.classList.contains('show') ? '收起' : '展开';
+          });
+        });
+      });
+
+      // 保存图片功能
+      function saveImage() {
+        const modalImg = document.getElementById('modalImage');
+        const link = document.createElement('a');
+        link.download = '图片.png';
+        link.href = modalImg.src;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+    </script>
+
+    <!-- 新闻内容区域 -->
+    <div class="news-container">
+
+
+      <div class="news-block">
+        <div class="news-date">2024-04-06</div>
+        <div class="news-title">江西南昌科普演讲</div>
+        <div class="news-content-direct">
+          江西省南昌血友协会活动上，钰洁展示了很多她翻译的信息，作了一次演讲。
+        </div>
+        <div class="news-images-many">
+          <img src="audios/20240406-1.png" alt="活动照片1">
+          <img src="audios/20240406-2.png" alt="活动照片2">
+        </div>
+        <div class="hidden-images">
+          <img src="audios/20240406-3.png" alt="活动照片3">
+          <img src="audios/20240406-4.png" alt="活动照片4">
+          <img src="audios/20240406-5.png" alt="活动照片5">
+        </div>
+        <button class="show-more-button">显示更多</button>
+
+        <div class="bilibili-video">
+          <iframe src="//player.bilibili.com/player.html?bvid=BV11PouYnEqV" 
+                  scrolling="no" 
+                  border="0" 
+                  frameborder="no" 
+                  framespacing="0" 
+                  allowfullscreen="true">
+          </iframe>
+        </div>
+      </div>
+
+
+      <div class="news-block">
+        <div class="news-date">2024-04-14</div>
+        <div class="news-title">河北唐山科普演讲</div>
+        <div class="news-content-direct">
+          河北唐山再次作科普演讲。
+        </div>
+        <div class="bilibili-video">
+          <iframe src="//player.bilibili.com/player.html?bvid=BV1yNouYSEmy" 
+                  scrolling="no" 
+                  border="0" 
+                  frameborder="no" 
+                  framespacing="0" 
+                  allowfullscreen="true">
+          </iframe>
+        </div>
+      </div>
+
+
+      <div class="news-block">
+        <div class="news-date">2024-05-24</div>
+        <div class="news-title">湖南长沙科普演讲</div>
+        <div class="news-content-direct">
+          湖南长沙作科普演讲。
+        </div>
+        <div class="news-images">
+          <img src="audios/20240524-1.png" alt="活动照片1">
+        </div>
+        <div class="bilibili-video">
+          <iframe src="//player.bilibili.com/player.html?bvid=BV1yTouYEEKs" 
+                  scrolling="no" 
+                  border="0" 
+                  frameborder="no" 
+                  framespacing="0" 
+                  allowfullscreen="true">
+          </iframe>
+      </div>
+      </div>
+
+
+      <div class="news-block">
+        <div class="news-date">2024-06-05</div>
+        <div class="news-title">发布第一篇科普文章</div>
+        <div class="news-content-direct">
+          在“南昌血友协会”微信公众号，发布了一篇科普文章。
+        </div>
+        <div class="news-link-container">
+          <a href="https://mp.weixin.qq.com/s/-43qrCFhm6ijHTV9EEI7eg" class="news-title">点击或扫码查看</a>
+          <div class="news-qr-popup">
+            <img src="audios/20240605.png" alt="二维码">
+            <div>扫码</div>
+          </div>
+        </div>
+     </div>
+
+
+      <div class="news-block">
+        <div class="news-date">2024-08-15</div>
+        <div class="news-title">申报南昌市慈善总会项目</div>
+        <div class="news-story">
+          <div class="story-header">
+            <div class="story-title">点击查看详细讲述</div>
+            <div class="story-toggle">展开</div>
+          </div>
+          <div class="story-content">
+            <p>背景</p>
+            <p>
+              血友病患者的亲属中有许多女性属于血友病携带者，包括患者的“大部分”母亲、“全部”女儿和“部分”姐妹，一直以来她们的健康很少得到关注。然而，有约1/3的女性携带者其凝血因子水平低于正常人的50%，以致于在生理期、分娩、外伤、手术等情形下，过量出血，甚至危及生命。她们亟需社会关注和医疗用药保障。
+              据南昌血友协会对江西1300余名患者的调查，764名接受调查的患者家庭中，119名已婚存续患者生育有104名女儿，301名患者有275名姐妹；据此推测，江西省现阶段有至少1700名、全国有约3万名血友病携带者。
+              进行凝血因子检查，是确诊女性血友病患者的唯一可靠方法。
+            </p>            <p>  
+              目的</p>              <p>
+              调查中国女性血友病携带者的人口学特征、凝血因子水平、出血症状，提高公众对女性血友病的关注，为她们提供建议和关怀。
+            </p>            <p>  
+              步骤</p>              <p>
+              第一步：合理设置问卷，通过在线平台、线下填写或电话访谈等形式散发问卷，预计回收500份，联系血友病家系中女性携带者以及潜在的携带者，调查评估她们的出血症状。开展宣传科普教育活动，提供基本的相关建议。
+            </p>            <p>  
+              第二步：为进行了凝血相关检测（凝血因子水平、PT、APTT或凝血四项检查）的女性提供补贴，预计补贴200人，减轻服务对象的经济负担。
+            </p>            <p>  
+              第三步：将问卷结果及凝血检测的数据录入数据库，进行大数据统计分析。后续由专业人士为她们给予建议和分析，提供帮扶和关怀。
+            </p>            <p>  
+              第四步：形成调研报告，为进一步医学研究、推动医疗政策保障、改善她们的生存环境奠定基础。
+              </p>
+              预期效果</p> <p>  
+              1.	检测女性血友病携带者的凝血四项和凝血因子水平，评估其凝血功能；</p> <p>  
+              2.	将使得数百名女性不再由于缺乏相关知识、而在未经凝血检测的情况下盲目进行分娩或手术；</p> <p>  
+              3.	将提高社会对于女性血友病的科学认识，直接为女性血友病患者提供建议和关怀；</p> <p>  
+              4.	长远看来，必将会降低中国女性血友病患者的出血风险，保障其生命安全，提高其生活质量；</p> <p>  
+              5.	估计中国尤其是江西省的女性血友病患者人数，研究女性血友病的凝血因子水平分布、出血症状特点，未来可促进相关领域医疗实践的进步。</p> <p>  
+              
+          </div>
+        </div>
+      </div>
+
+      <div class="news-block">
+        <div class="news-date">2024-09-05</div>
+        <div class="news-title">久久公益节项目开启</div>
+        <div class="news-content-direct">
+          南昌血友协会在腾讯公益上线了“携带者检测费用援助”项目。钰洁制作宣传视频和海报。最后成功在5天内募集3万5千多元。
+        </div>
+        <div class="news-images-many">
+          <img src="audios/20240905-1.png" alt="活动照片1">
+          <img src="audios/20240905-2.png" alt="活动照片2">
+        </div>
+        <div class="hidden-images">
+          <img src="audios/20240905-3.png" alt="活动照片3">
+          <img src="audios/20240905-4.png" alt="活动照片4">
+          <img src="audios/20240905-5.png" alt="活动照片5">
+          <img src="audios/20240905-6.png" alt="活动照片6">
+          <img src="audios/20240905-7.png" alt="活动照片7">        
+        </div>
+        <button class="show-more-button">显示更多</button>
+
+        <div class="bilibili-video">
+          <iframe src="//player.bilibili.com/player.html?bvid=BV1EjHXebESz" 
+                  scrolling="no" 
+                  border="0" 
+                  frameborder="no" 
+                  framespacing="0" 
+                  allowfullscreen="true">
+          </iframe>
+        </div>
+        <div class="bilibili-video">
+          <iframe src="//player.bilibili.com/player.html?bvid=BV1qHpPe9EFh" 
+                  scrolling="no" 
+                  border="0" 
+                  frameborder="no" 
+                  framespacing="0" 
+                  allowfullscreen="true">
+          </iframe>
+        </div>
+      </div>
+
+
+      <div class="news-block">
+        <div class="news-date">2024-09-19</div>
+        <div class="news-title">正式启动“携带者做检测有补贴”项目</div>
+        <div class="news-content-direct">
+          在“南昌血友协会”微信公众号，发布了项目介绍。
+        </div>
+        <div class="news-link-container">
+          <a href="https://mp.weixin.qq.com/s/gOd0On7n0nIyoHXg80euHQ" class="news-title">点击或扫码查看</a>
+          <div class="news-qr-popup">
+            <img src="audios/20240919.png" alt="二维码">
+            <div>扫码</div>
+          </div>
+        </div>
+     </div>
+
+
+
+     <div class="news-block">
+      <div class="news-date">2024-11-23</div>
+      <div class="news-title">江西赣州线上讲课</div>
+      <div class="news-content-direct">由于江西赣州的10多位女性所处的地方没有医院可以作凝血检测，我们请来检测公司来到赣州南康为她们做检测。</div>
+      <div class="news-story">
+        <div class="story-header">
+          <div class="story-title">点击查看详细讲述</div>
+          <div class="story-toggle">展开</div>
+        </div>
+        <div class="story-content">
+        </p> <p>  各位赣州的血友病兄弟姐妹们，大家好。我是土生土长的江西人，从小到大，跟着父亲东奔西走，见过也认识了许多血友病家庭。我发现，所有这些家庭都有一个共同点——总会有一个或多个非常坚强的女性。
+
+        </p> <p>  就拿我爸爸来说吧，他小时候因为流血不止被诊断为血友病，当时医生断言他活不过18岁，而现在，我的父亲已经快50岁了。他的父亲，也就是我的爷爷，曾一度失去了希望；但我的奶奶却从未放弃过这个孩子。她带着年幼的父亲前往南昌住院。随着父亲年龄的增长、体重的增加，奶奶依然用肩膀背着他，脊梁从未弯曲。父亲也非常幸运，有几位疼他爱他的亲姐姐。
+          
+        </p> <p>  后来，当我在妈妈肚子里的时候，父亲曾经想过：“这个孩子注定是血友病携带者，将来也许会面临许多问题。”但他依然决定让我来到这个世界，因为他相信二十年后的医学进步，会让血友病携带者不再成为问题。
+          
+        </p> <p>  大概在我小学的时候，我偶然翻开了一本关于血友病的手册，那是我第一次清楚地意识到，自己是一个血友病携带者。到了高中，当我学到“伴X染色体隐性遗传病”那一章节时，我拿着课本去问生物老师：“如果是杂合基因的女性携带者，真的就不会有症状吗？”老师告诉我，高中阶段的教育是这样认为的。
+          
+        </p> <p>  转眼已是二十年后，现在我19岁，已考入大学，学业上小有收获。可当我翻阅世界最前沿的论文与期刊时，我发现我的高中生物老师错了。
+          
+        </p> <p>  讲到这里，我想问大家两个问题：
+        </p> <p>  第一，女性会得血友病吗？
+        </p> <p>  第二，什么样的条件下女性才会得血友病？
+          
+        </p> <p>  我们来总结一下，大家可能认为女性患血友病非常罕见，只有当一个女性的父亲是血友病患者、母亲是携带者时，她才有可能患病。我们长期以来，包括很多患者、甚至医生都误以为血友病“传男不传女”。很多科普资料也写着“女性患者罕见，携带者一般不会发病”。因为女性有两条X染色体，一条正常一条异常，通常会有一半的凝血因子水平，也就不会有明显症状。
+          
+        </p> <p>  然而，近年来的研究发现，血友病携带者并不只是“携带”而已，她们是有可能发病的。具体比例是多少呢？大约有40%的女性携带者凝血因子水平低于40%，这意味着每三个携带者中，起码有一个实际上已经属于血友病患者。
+          
+        </p> <p>  下面这张图就是血友病携带者凝血因子水平的分布。我们可以看到21-30%、31-40%、41-50%这三段是最高的，也就是说大多数携带者的因子水平在21%到50%之间。而正常女性的凝血因子水平大约在100%。
+          
+        </p> <p>  这段话是来自世界血友病联盟的宣传册。
+        </p> <p>  血友病是一种比较罕见的出血性疾病。多年来，人们以为只 有男性才可能出现血友病的症状，“携带”血友病基因的女 性不会出现症状。 如今我们知道，很多携带者都经历着血友病的症状。随着我 们对疾病了解的增多，我们也更了解女性受疾病影响的原因 和方式。一些女性伴有这些症状多年却没有被诊断出来，甚 至没有被怀疑过有出血性疾病。通过教育和宣传，世界血友 病联盟正在努力弥补护理上的这一差距。
+        </p> <p>  名不正则言不顺，言不顺则事不成。接下来，我想为女性血友病患者“正名”。你现在百度“血友病携带者”，会发现很多结果都说“携带者不会有症状”，但这些是已经过时的资料。我希望用自己的力量，把这些最新的国内外科研成果带给我们的病友们，也引起更多医生和研究人员的关注。
+          
+        </p> <p>  “携带者”这个名字存在很大的局限性，它容易让人误以为她们不会发病。但实际上，如果她们的凝血因子VIII或IX水平低于40%，就属于女性血友病患者。
+          
+        </p> <p>  如果高于5%、低于40%，为轻度患者；
+          
+        </p> <p>  高于1%、低于5%，为中度；
+          
+        </p> <p>  低于1%，则为重度。
+        </p> <p>  如果她们的因子水平高于40%，但仍有明显出血症状，就称为“有症状的血友病携带者”。
+          
+        </p> <p>  从今天起，希望大家在提到血友病患者时，不再默认只有男性，也要考虑女性，她们也可能正在忍受血友病的折磨。
+          
+        </p> <p>  你是不是觉得这些认知有点颠覆？那么，江西甚至中国到底有多少女性血友病携带者呢？我们做了个简单推算：江西大约有1300多名登记在册的男性血友病患者，其中764人接受了调查，显示有119人已婚，共育有104个女儿；另有301人有姐妹，共计275名。通过推算，江西省至少有1700多名女性携带者。
+          
+        </p> <p>  而全国登记在册的男性患者为4万人，按此比例估算，中国大约有5到6万名女性携带者。这是一个保守的估计。而女性血友病患者，至少有2万人。然而由于数据缺乏，这个数字远低于实际情况，我们还需进一步调研来确定中国女性血友病患者的真实数量。
+          
+        </p> <p>  然而，这么庞大的人群，在诊断和治疗上却得不到应有的重视。我观察到，即便是血液科医生，有的也不太清楚携带者可能发病，更别说我们普通患者了。
+          
+        </p> <p>  我们可以看这样一组数据：
+        </p> <p>  女性携带者的凝血因子水平中位数为63.5%，而正常女性是101.8%。
+        </p> <p>  女性患者的出血症状和同等因子水平的男性是类似的，也就是说，比如一个男性因子5%，是什么症状，那么一个女性如果也是5%，她的症状也差不多。
+          
+        </p> <p>  而即便一个女性携带者的因子水平高于50%，她的出血风险仍然高于正常女性。
+          
+        </p> <p>  很多女性主要的出血表现是月经。一些女性明明月经量异常多，却不好意思说，也不好意思去看妇科，因此错失了发现凝血问题的机会。长期月经过多会影响健康、工作和生活质量。如果你一次月经用了超过20片日用卫生巾，那你可能就是“月经过多”。
+          
+        </p> <p>  还有一些症状也可能提示问题：
+          
+        </p> <p>  容易流鼻血
+          
+        </p> <p>  身上常常出现淤青，自己却不知道怎么来的
+          
+        </p> <p>  血常规提示贫血（低血红蛋白）
+          
+        </p> <p>  这些可能都与凝血障碍有关。而中轻度患者常常表面看起来和正常人无异，往往直到做手术或生育时才第一次出现严重出血的情况。但这时候风险就很大了。如果是在小医院，医生没有血友病手术经验、也没有储备凝血因子，那就非常危险。
+          
+        </p> <p>  我曾听说一位武汉的阿姨，她的长子是血友病患者。当她生小儿子时发生大出血，被下了病危通知书。好在最后抢救成功。事后检查发现她的因子水平只有25%左右。这种情况其实是可以预防的，只要提前关注这个问题。
+          
+        </p> <p>  我们来看一些国外的数据（来自荷兰的研究）：
+          
+        </p> <p>  拔牙后长时间出血的比例：携带者为27%，正常女性为12%；
+          
+        </p> <p>   手术后出血：携带者28%，正常女性11%；
+          
+        </p> <p>  月经过多：携带者接近50%，正常女性约10%。
+          
+        </p> <p>  但因为样本量较小（如中国最多研究只有125名携带者，而美国的研究有3500多个），我们还需要更多数据支持。为此，我正在进行全国范围的大型调研，检测女性携带者的凝血因子水平，期望填补国内的空白。
+          
+        </p> <p>  最重要的是产后出血：
+          
+        </p> <p>  正常女性的发生率小于1%，而携带者高达26.5%。
+        </p> <p>  产后出血的定义是阴道分娩出血＞500ml或剖宫产＞1000ml。大家可以拿一个矿泉水瓶感受一下分量：500ml就是一瓶水，1000ml是两瓶水。而献血400ml都能让人晕倒，更何况这是在产后出血的情境下。
+          
+        </p> <p>  但这些痛苦真的无法避免吗？不尽然。只要提前注射凝血因子，是可以进行安全分娩的。真正的问题在于“有没有被重视”。
+          
+        </p> <p>  研究中显示：30名携带者共经历34次分娩，其中9次产后出血，但只有1人提前注射因子成功避免出血，其他则通过紧急措施处理。我们可以看出这些血友妈妈们并没有得到应有的预防性治疗。
+          
+        </p> <p>  近年来，男性血友病患者的治疗进步明显，医保也日趋完善。而女性患者的问题却是“有没有药用”——因为她们根本没被当作患者，也就谈不上治疗。
+          
+        </p> <p>  女性的风险并不比男性少，反而多了许多，如流产手术、放节育环等特有情形。中轻度女性同样有重度的出血风险。有位轻度男患者因眼科手术眼睛出血失明。换作女性携带者，也可能会发生同样的悲剧。
+          
+        </p> <p>  更严重的是，女性血友病的诊断常常被延迟。在血友病家庭中长大的女孩，可能已经习惯了“流血”这个事，不觉得异常，从而错过诊断的机会。
+          
+        </p> <p>  另外，国外早就普及的一些治疗方法，在国内依旧非常罕见，比如去氨加压素鼻喷剂，用于流鼻血或剧烈运动前预防出血，但国内很少应用。
+          
+        </p> <p>  研究也严重不足。女性血友病的问题背后有一个现实：医疗资源不足，难以照顾到每一位患者。但我相信，只要我们不懈努力，总有一天，女性患者也能像男性一样获得充分的治疗。
+          
+        </p> <p>  中国女性血友病的现状有“三低”特征：诊断率低、治疗率低、研究数量低。根据美国疾控中心的数据，轻度血友病患者中20%是女性，而中国远远低于这个比例，说明还有很多女性尚未被发现。
+          
+        </p> <p>  让我们一起努力，改变这个局面。让“女性不会患血友病”的错误观念，彻底成为过去式。
+          
+        </div>
+      </div>
+
+    </div>
+
+
+      <div class="news-block">
+        <div class="news-date">2025-01-04</div>
+        <div class="news-title">江西南昌科普演讲</div>
+        <div class="news-content-direct">
+          我们在江西南昌成功组织了一次患者教育兼检测活动，这次是线上宣讲，还为30多名女性做了凝血检测，14个家庭做了基因检测。</div>
+          <div class="bilibili-video">
+            <iframe src="//player.bilibili.com/player.html?bvid=BV19moMYwEho" 
+                    scrolling="no" 
+                    border="0" 
+                    frameborder="no" 
+                    framespacing="0" 
+                    allowfullscreen="true">
+            </iframe>
+          </div>
+        <div class="news-link-container">
+          <a href="https://mp.weixin.qq.com/s/Xk3Wb1GcpgxwBdSG3FD71g" class="news-title">点击或扫码查看新闻稿</a>
+          <div class="news-qr-popup">
+            <img src="audios/20250104.png" alt="二维码">
+            <div>扫码</div>
+        </div>
+      </div>
+</div>
+
+
+<div class="news-block">
+  <div class="news-date">2025-01-19</div>
+  <div class="news-title">项目稳步推进</div>
+  <div class="news-content-direct">
+    项目触及了更多的人。
+  </div>
+  <div class="news-link-container">
+    <a href="https://mp.weixin.qq.com/s/NhhsIpUjhrLBfHGPf2Dkvg" class="news-title">点击或扫码查看新闻稿</a>
+    <div class="news-qr-popup">
+      <img src="audios/20250119.png" alt="二维码">
+      <div>扫码</div>
+    </div>
+  </div>
+</div>
+
+<div class="news-block">
+  <div class="news-date">2025-01-28</div>
+  <div class="news-title">"愿意给血友注射的诊所地图"上线</div>
+  <div class="news-content-direct">
+    该网页主要由钰洁和王国林共同制作。
+  </div>
+  <div class="news-link-container">
+    <a href="http://47.122.118.186/map/" class="news-title">点击或扫码进入地图</a>
+    <div class="news-qr-popup">
+      <img src="audios/20250128.png" alt="二维码">
+      <div>扫码</div>
+    </div>
+  </div>
+</div>
+
+<div class="news-block">
+  <div class="news-date">2025-02-28</div>
+  <div class="news-title">中期报告发布</div>
+  <div class="news-content-direct">
+    钰洁综合现有的调查分析，发布了一个中期报告。
+  </div>
+  <div class="news-link-container">
+    <a href="https://mp.weixin.qq.com/s/cIfX2S76b9kOj__LPLl_xw" class="news-title">点击或扫码查看新闻稿</a>
+    <div class="news-qr-popup">
+      <img src="audios/20250119.png" alt="二维码">
+      <div>扫码</div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="news-block">
+  <div class="news-date">2025-03-08</div>
+  <div class="news-title">女性节发布视频</div>
+  <div class="news-content-direct">
+    - 这天是国际女性节，钰洁发布了2个中文科普宣传视频，并参与了华中科技大学同济医学院健康科普大赛。</div>
+    <div class="bilibili-video">
+      <iframe src="//player.bilibili.com/player.html?bvid=BV1c8deY2Enf" 
+              scrolling="no" 
+              border="0" 
+              frameborder="no" 
+              framespacing="0" 
+              allowfullscreen="true">
+      </iframe>
+    </div>
+    <div class="bilibili-video">
+      <iframe src="//player.bilibili.com/player.html?bvid=BV1bs9UYbEMq" 
+              scrolling="no" 
+              border="0" 
+              frameborder="no" 
+              framespacing="0" 
+              allowfullscreen="true">
+      </iframe>
+    </div>
+    
+  <div class="news-link-container">
+    <a href="https://mp.weixin.qq.com/s/AeKNzIq3tny57HBxS6lmvg" class="news-title">点击或扫码查看新闻稿</a>
+    <div class="news-qr-popup">
+      <img src="audios/20250308.png" alt="二维码">
+      <div>扫码</div>
+  </div>
+</div>
+</div>
+
+
+
+
+
+
+<div class="news-block">
+  <div class="news-date">2025-03-12</div>
+  <div class="news-title">申报大创项目</div>
+  <div class="news-content-direct">在华中科技大学申请了大学生创新创业学科交叉项目，成功寻找到2位指导老师，从此5人团队正式成立。    </div>
+  <div class="news-story">
+    <div class="story-header">
+      <div class="story-title">点击查看详细讲述</div>
+      <div class="story-toggle">展开</div>
+    </div>
+    <div class="story-content">
+      <p>二、项目研究目的
+     </p><p>1.	对中国中部地区（主要是湖北省、江西省）受血友病影响的女性群体进行系统性调查和分析
+    </p><p>2.	探索基因、凝血因子水平与出血情况之间的关系
+    </p><p>3.	结合国际研究成果，重点分析中国女性携带者在月经、分娩、流产等方面的特殊性。
+    </p><p>4.	建立出血风险预测模型及基因-表型关联模型，为精准医疗提供科学依据，并提升社会对该群体健康状况的关注。
+    </p><p>三、项目研究内容
+    </p><p> 1.	验证：
+    </p><p>•	进行问卷调查、凝血检测和基因检测，做描述性统计。
+    </p><p>•	验证携带者中相关症状和因子缺乏的比例，得出凝血因子分布的数据。
+    </p><p>•	通过流行病学分析，统计中部地区乃至中国范围内的女性血友病人数。
+    </p><p>2.	深入探究：
+    </p><p>•	差异分析：设置实验组和对照组，比较携带者与非携带者的凝血因子水平及出血情况。
+    </p><p>•	关联分析和因果分析：探讨携带者的出血自述与凝血检测结果之间的相关性与因果性。
+    </p><p>•	分层分析：分年龄段细化中国女性的特殊出血特征。
+    </p><p>•	构建因子-出血风险预测模型。
+    </p><p>•	构建基因-表型关联模型。
+    </p><p>3.	结果展示与社会推广：
+    </p><p>•	交互式网页：直观呈现研究成果，方便公众与医疗从业者使用。
+    </p><p>•	科普宣传：与美工、合作，制作易懂的宣传材料，提高社会认知。
+    </p><p>四、国、内外研究现状和发展动态
+    </p><p>国外研究进展
+    </p><p>•	早期个案研究（1951-1998）：Merskey & Macfarlane 首次提出女性携带者的过度出血现象，随后Lusher等人进一步确认女性患者的关节出血和月经过多等症状。然而，研究仍然较少，病例数量较小，对此问题认识不足。
+    </p><p>•	大规模样本研究（2006）：Plug等人研究了274名女性携带者，发现35%的携带者因子水平低于40%，并证实凝血因子水平偏低与出血症状之间的相关性。自此，女性血友病的发病率、症状、机制等问题成为国内外学者关注的热点，取得了较多研究成果。
+    </p><p>•	基因研究（2009）：Pavlova等人发现，纯合错义突变、复合杂合突变、杂合突变与X染色体的非随机失活可能导致女性患血友病。
+    </p><p>•	女性血友病新命名法（2019-2021）：ISTH大会与SSC通讯正式提出了“女性血友病”诊断标准，并细化轻度、中度、重度患者的判定标准。
+    </p><p>•	全球统计（2012-2024）：
+    </p><p>o	2012年，世界血友病联盟估计，全球患血友病A和B的男性约46万人，而患血友病A和B的女性约36万人。
+    </p><p>o	2019年，Connie H. Miller等人预计美国共有19000名出血症状的女性，但只有18%（n=3504）来到美国血友病治疗中心（HTC）就诊；并得出47.6%（n=1668）的携带者符合血友病诊断标准。
+    </p><p>o	2019年，美国疾病控制与预防中心 (CDC) 社区的数据库中，所有的血友病病例中有 0.5% 的重度病例、1.4% 的中度病例和约 20% 的轻度病例是女性。
+    </p><p>o	2024年Cedric Hermans等指出，长期以来，人们未能认识到女性也会出血和患血友病，女性患者往往面临过度出血、诊断延误、治疗不足和生活质量差，除了经历与男性相同的出血症状外，女性还有月经、生育和更年期等额外危险因素。
+    </p><p>o	如今国外学界正积极研究女性血友病的症状，并已取得诸多成果，但仍面临数据不足等问题。
+    </p><p>国内研究进展
+    </p><p>•	案例研究与队列研究（2019-2022）：
+    </p><p>o	Sen Li等人评估ISTH-BAT在125名中国女性血友病患者中的有效性，并研究了节育环、人工流产的影响。
+    </p><p>o	Wenhui Zhang等人对61名女性携带者展开回顾性队列研究。
+    </p><p>o	中国预计有14万男性和10万女性血友病患者，但中国登记的血友病病例里只有0.3%是女性。
+    </p><p>•	国内研究不足之处：
+    </p><p>o	现有样本量较小，难以反映中国女性血友病患者的整体状况。
+    </p><p>o	相关研究较少，未能引起国内学界的充分关注。
+    </p><p>o	尚未深入探讨中国女性患者的特殊性及症状评估。
+    </p><p>五、研究路线及解决的主要问题
+    </p><p>1.	研究范围扩大：
+    </p><p>•	设计并收集400份出血情况问卷，涵盖17种出血类型
+    </p><p>•	在中部地区组织血液检测（200-300人），包括凝血四项及第八/第九凝血因子水平
+    </p><p>•	进行20个家庭（60-100人）的基因检测，确定女性是否为携带者
+    </p><p>2.	生信分析：
+    </p><p>•	目前已有国内对125名携带者的研究，已经研究出了她们的出血症状发生率，但是“为何发病”、“如何预测”的问题未被阐明
+    </p><p>•	针对不同年龄段的女性进行分层分析，探究出血规律
+    </p><p>•	建立出血风险预测模型，找到风险因素
+    </p><p>•	通过HUMARA实验和甲基化分析等新方法，探究病理成因
+    </p><p>3.	网站及可视化工具开发：
+    </p><p>•	解决“如何提高意识”“如何改善医疗”“如何推动政策”的实际问题
+    </p><p>•	设计交互式可视化网页和科普宣传材料，使研究成果易于理解和传播
+    </p><p>•	结合数据分析结果，为血友病女性携带者提供科学的健康管理方案
+    </p><p>•	调查血友病女性携带者的生存状况和医疗需求，为相关政策制定提供参考
+    </p><p>六、项目创新及特色
+    </p><p>1.	跨学科合作：结合医学预防、数学建模、生物信息等领域知识。
+    </p><p>2.	多维度数据融合：结合基因检测、凝血因子水平、出血情况和患者自述，构建全面的疾病风险评估模型。
+    </p><p>3.	病理分析：利用qPCR实验与基因甲基化分析结合的方法，探究成因。
+    </p><p>4.	可视化与公众科普：通过网页设计与美工团队合作，直观、可交互地呈现研究成果，提升社会影响力。
+    </p><p>5.	探究中国女性特点：本研究将填补中国血友病女性携带者相关数据的空白，为精准医疗提供有力支持。
+    </p><p>七、项目综述
+    </p><p>本项目基于多维度数据，对中国中部地区血友病女性携带者的基因与出血特征进行深入分析，旨在填补国内现有研究的空白。通过统计分析与建模，探索凝血因子水平的分布规律，构建基因-表型关联模型。最终开发出直观的可视化工具，以便携带者及医疗从业者更好地理解和管理相关健康风险。同时，通过调研与科普推广，提高公众认知，为未来政策制定提供数据支持。
+    </p><p>预研基础：已收集200名携带者的出血自评，进行一些凝血检测和基因检测，结果显示出血症状比非携带者显著严重，凝血因子分布符合偏态分布，且凝血因子水平与出血评分有很强的负相关性。
+    </p><p>可行性分析：
+    </p><p>1.	技术可行性：
+    </p><p>•	队伍同学有使用r语言的经验，可以较好地进行数据分析；
+    </p><p>•	队伍同学有相关凝胶电泳实验的基础，可负责 qPCR 数据采集及实验操作；
+    </p><p>•	本实验所涉及到的诸多方法，如数据库管理、文献查阅和引用、学术写作，小组成员均已学习并操作过。
+    </p><p>2.	人员可行性：
+    </p><p>•	指导老师有流行病学、基因相关分析的丰厚经验与成果；
+    </p><p>•	指导老师有数据分析与建模的专业背景；
+    </p><p>•	组内学生来自三个不同的学院，实现不同专业的交流合作与互补；
+    </p><p>•	所有学生均已通过组会讨论、文献阅读等学习，了解并已掌握部分所需的实验与分析技术，并保证有充沛的时间和热情完成相关工作。
+    </p><p>八、项目实施方案
+    </p><p>1.	数据处理与分析（3-5个月）
+    </p><p>•	数据收集、清洗、整理、标准化。
+    </p><p>•	进行初步统计分析。
+    </p><p>•	训练并优化出血风险预测模型。
+    </p><p>2.	网页设计与交互优化（1-2个月）
+    </p><p>•	设计交互式可视化网页，确保研究成果的直观性和可读性。
+    </p><p>•	结合用户反馈优化界面与功能。
+    </p><p>3.	社会调研与科普推广（1-2个月）
+    </p><p>•	进行问卷调查与访谈，分析携带者的社会需求。
+    </p><p>•	制作文章、图文、视频等方式的科普材料，通过社交媒体及相关渠道传播。
+    </p><p>4.	项目总结与成果发布（2-3个月）
+    </p><p>•	整理研究成果，撰写论文。
+    </p><p>•	在学术会议或科普平台上发布研究结果。
+    </p><p>九、项目预期成果
+    </p><p>1.	学术成果
+    </p><p>•	发表1-2篇相关报告或论文（中文或英文）。
+    </p><p>•	建立并验证血友病女性携带者的出血风险预测模型，和基因-表型模型。
+    </p><p>2.	实践成果和社会影响
+    </p><p>•	开发一个交互式网页。
+    </p><p>•	制作多篇科普材料，提高社会对血友病女性携带者的关注。
+    </p><p>•	影响相关政策制定，提高血友病女性携带者的医疗保障水平。
+    </p>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="news-block">
+  <div class="news-date">2025-03-14</div>
+  <div class="news-title">自强之星答辩</div>
+  <div class="news-content-direct">
+    借此机会，让更多大学生了解这件有意义的事情。</div>
+    <div class="bilibili-video">
+      <iframe src="//player.bilibili.com/player.html?bvid=BV19UoMYhEuv" 
+              scrolling="no" 
+              border="0" 
+              frameborder="no" 
+              framespacing="0" 
+              allowfullscreen="true">
+      </iframe>
+    </div>
+
+</div>
+
+
+
+<div class="news-block">
+  <div class="news-date">2025-03-15</div>
+  <div class="news-title">天津论坛发言</div>
+  <div class="news-content-direct">
+    在天津友爱罕见病中心举办的会议上，得到发言机会。</div>
+    <div class="bilibili-video">
+      <iframe src="//player.bilibili.com/player.html?bvid=BV1XUoMYhEoY" 
+              scrolling="no" 
+              border="0" 
+              frameborder="no" 
+              framespacing="0" 
+              allowfullscreen="true">
+      </iframe>
+    </div>
+
+</div>
+
+
+<div class="news-block">
+  <div class="news-date">2025-03-22</div>
+  <div class="news-title">南昌会议报告</div>
+  <div class="news-content-direct">
+    在南昌血之友协会世界血友病日主题活动上作报告。</div>
+    <div class="bilibili-video">
+      <iframe src="//player.bilibili.com/player.html?bvid=BV1qs5hzqEgh" 
+              scrolling="no" 
+              border="0" 
+              frameborder="no" 
+              framespacing="0" 
+              allowfullscreen="true">
+      </iframe>
+    </div>
+    <div class="news-link-container">
+      <a href="https://mp.weixin.qq.com/s/xorRaHoyWflSmmkrbara8Q" class="news-title">点击或扫码查看</a>
+      <div class="news-qr-popup">
+        <img src="audios/20250322.png" alt="二维码">
+        <div>扫码</div>
+      </div>
+    </div>
+</div>
+
+
+<div class="news-block">
+  <div class="news-date">2025-04-03</div>
+  <div class="news-title">入围同济科普大赛</div>
+  <div class="news-content-direct">
+    在患者、家属、志愿者等各界人士支持下，成功在6日内获得近2000票。</div>
+    <div class="news-link-container">
+      <a href="https://mp.weixin.qq.com/s/HIbB5O4EoswnrE5vb8igig" class="news-title">点击或扫码查看</a>
+      <div class="news-qr-popup">
+        <img src="audios/20250402.png" alt="二维码">
+        <div>扫码</div>
+      </div>
+    </div>
+</div>
+
+<div class="news-block">
+  <div class="news-date">2025-04-05</div>
+  <div class="news-title">小红书获得10万浏览</div>
+  <div class="news-images">
+          <img src="audios/20250405.png" alt="活动照片1"></div>
+
+  <div class="news-content-direct">
+    在小红书发布一位血友病女孩的亲身经历后，网友点赞2000+，评论区展开200多条讨论，实现了“扩圈”。</div>
+    <div class="news-link-container">
+
+      <a href="https://www.xiaohongshu.com/explore/67f0ab09000000001b03ce07?app_platform=android&ignoreEngage=true&app_version=8.63.0&share_from_user_hidden=true&xsec_source=app_share&type=normal&xsec_token=CBpd90XnYY0z0gaToEbLoGeR7EwIKDbfWrexFIrvbtnjU=&" class="news-title">点击或扫码查看</a>
+      <div class="news-qr-popup">
+        <img src="audios/20250405.jpg" alt="二维码">
+        <div>扫码</div>
+      </div>
+    </div>
+</div>
+
+
+<div class="news-block">
+  <div class="news-date">2025-04-13</div>
+  <div class="news-title">江西和唐山会议报告</div>
+  <div class="news-content-direct">
+    在两地世界血友病日主题活动上，作远程报告。</div>
+    <div class="bilibili-video">
+      <iframe src="//player.bilibili.com/player.html?bvid=BV1v85hzPE7R" 
+              scrolling="no" 
+              border="0" 
+              frameborder="no" 
+              framespacing="0" 
+              allowfullscreen="true">
+      </iframe>
+    </div>
+</div>
+
+
+<div class="news-block">
+  <div class="news-date">2025-04-15</div>
+  <div class="news-title">"女性月经血量估算工具"上线</div>
+  <div class="news-content-direct">
+    该网页初衷是为了提高全体女性关注月经的意识，从而提高对血友病女性的关注。
+  </div>
+  <div class="news-link-container">
+    <a href="http://47.122.118.186/period" class="news-title">点击或扫码查看工具</a>
+    <div class="news-qr-popup">
+      <img src="audios/20250415.png" alt="二维码">
+      <div>扫码</div>
+    </div>
+  </div>
+</div>
+
+      <!-- 类型一：日期+活动介绍+活动内容（悬停显示）
+      <div class="news-block">
+        <div class="news-date">2024-03-20</div>
+        <div class="news-title">血友病科普讲座</div>
+        <div class="news-content">
+          本次活动邀请了多位专家，详细讲解了血友病的预防、治疗和日常护理知识。现场还设置了互动环节，让参与者能够更好地理解和掌握相关知识。
+        </div>
+      </div>
+
+      <!-- 类型二：日期+活动介绍+外部链接+二维码 
+      <div class="news-block">
+        <div class="news-date">2024-03-15</div>
+        <div class="news-title">旅程开始</div>
+        <div class="news-link-container">
+          <a href="#" class="news-title">点击或扫码观看</a>
+          <div class="news-qr-popup">
+            <img src="code.png" alt="义诊二维码">
+            <div>扫码</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 类型三：日期+活动介绍+图片 
+      <div class="news-block">
+        <div class="news-date">2024-03-10</div>
+        <div class="news-title">科普演讲</div>
+        <div class="news-images">
+          <img src="audios/event1.jpg" alt="活动照片1">
+          <img src="audios/event2.jpg" alt="活动照片2">
+          <img src="audios/event3.jpg" alt="活动照片3">
+        </div>
+        <div class="news-title">演讲视频</div>
+        <div class="news-video">
+          <video controls>
+            <source src="audios/tutorial.mp4" type="video/mp4">
+            您的浏览器不支持视频播放。
+          </video>
+        </div>
+      </div>
+
+      <!-- 类型四：日期+活动介绍+视频 
+      <div class="news-block">
+        <div class="news-date">2024-03-05</div>
+        <div class="news-title">血友病治疗视频教程</div>
+        <div class="news-video">
+          <video controls>
+            <source src="tutorial.mp4" type="video/mp4">
+            您的浏览器不支持视频播放。
+          </video>
+        </div>
+      </div>
+
+      <!-- 类型五：日期+活动介绍+活动内容（直接显示） 
+      <div class="news-block">
+        <div class="news-date">2024-04-10</div>
+        <div class="news-title">血友病知识普及活动</div>
+        <div class="news-content-direct">
+          本次活动旨在提高公众对血友病的认识，通过专家讲解、案例分享等形式，帮助更多人了解血友病的预防和治疗知识。活动得到了社区的大力支持，参与人数超过100人。
+        </div>
+      </div>
+
+      <!-- 类型六：日期+活动介绍+多图片 
+      <div class="news-block">
+        <div class="news-date">2024-04-15</div>
+        <div class="news-title">社区活动照片集</div>
+        <div class="news-images-many">
+          <img src="audios/event1.png" alt="活动照片1">
+          <img src="audios/event2.png" alt="活动照片2">
+          <img src="audios/event3.png" alt="活动照片3">
+        </div>
+        <div class="hidden-images">
+          <img src="audios/event4.png" alt="活动照片4">
+          <img src="audios/event5.png" alt="活动照片5">
+          <img src="audios/event6.png" alt="活动照片6">
+          <img src="audios/event7.png" alt="活动照片7">
+          <img src="audios/event8.png" alt="活动照片8">
+          <img src="audios/event9.png" alt="活动照片9">
+        </div>
+        <button class="show-more-button">显示更多</button>
+      </div>
+
+      <!-- 类型七：日期+活动介绍+具体讲述（点击展开） 
+      <div class="news-block">
+        <div class="news-date">2024-04-20</div>
+        <div class="news-title">血友病患者的康复之路</div>
+        <div class="news-story">
+          <div class="story-header">
+            <div class="story-title">点击查看详细讲述</div>
+            <div class="story-toggle">展开</div>
+          </div>
+          <div class="story-content">
+            <p>在这次活动中，我们邀请了几位血友病患者分享他们的康复经历。他们讲述了从确诊到接受治疗，再到逐渐康复的整个过程。这些真实的经历给了其他患者很大的鼓励和希望。</p>
+            <p>其中，张先生分享了他如何通过坚持治疗和积极锻炼，最终重返工作岗位的经历。李女士则讲述了她在怀孕期间如何与医生密切配合，最终顺利生下健康宝宝的故事。</p>
+            <p>这些故事不仅展现了医疗技术的进步，更体现了患者和家属的坚强意志。通过分享这些经历，我们希望能够帮助更多的血友病患者树立信心，积极面对疾病。</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 类型八：日期+活动介绍+哔哩哔哩视频 
+      <div class="news-block">
+        <div class="news-date">2024-04-25</div>
+        <div class="news-title">血友病科普视频</div>
+        <div class="news-content-direct">
+          本期视频详细讲解了血友病的相关知识，包括预防、治疗和日常护理等内容。
+        </div>
+        <div class="bilibili-video">
+          <iframe src="//player.bilibili.com/player.html?bvid=BV1qHpPe9EFh" 
+                  scrolling="no" 
+                  border="0" 
+                  frameborder="no" 
+                  framespacing="0" 
+                  allowfullscreen="true">
+          </iframe>
+        </div>
+      </div>-->
+    </div>
+</body>
+</html>
