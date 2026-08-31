@@ -1,0 +1,2762 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-zh="愿意为血友病患者注射的诊所或医院" data-en="Clinics and Hospitals for Hemophilia Patients">愿意为血友病患者注射的诊所或医院</title>
+    <style>
+    /* 基础样式 */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    /* 顶部导航栏样式 */
+    .top-nav {
+      width: 100%;
+      background-color: #fff;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .logo-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 15px 20px;
+      background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-img {
+      height: 40px;
+      width: auto;
+    }
+
+    .logo-text {
+      font-size: 24px;
+      font-weight: bold;
+      color: white;
+    }
+
+    .nav-controls {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .language-switch {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .lang-btn {
+      padding: 8px 16px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      background: transparent;
+      color: white;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .lang-btn:hover,
+    .lang-btn.active {
+      background: rgba(255, 255, 255, 0.2);
+      border-color: rgba(255, 255, 255, 0.8);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 20px;
+      background-color: #fff;
+      flex-wrap: wrap;
+      gap: 20px;
+      border-top: 1px solid rgba(220, 53, 69, 0.1);
+    }
+
+    .nav-links a {
+      color: #333;
+      text-decoration: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      transition: all 0.3s ease;
+      font-weight: 500;
+    }
+
+    .nav-links a:hover {
+      background-color: rgba(220, 53, 69, 0.1);
+      color: #dc3545;
+    }
+
+    .nav-link-container {
+      position: relative;
+      display: inline-block;
+    }
+
+    .qr-popup {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      margin-top: 8px;
+      background-color: white;
+      padding: 15px;
+      border: 1px solid rgba(220, 53, 69, 0.2);
+      border-radius: 8px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+      text-align: center;
+      z-index: 1100;
+      white-space: nowrap;
+    }
+
+    .qr-popup img {
+      display: block;
+      max-width: 100px;
+      height: auto;
+      margin-bottom: 8px;
+      border-radius: 4px;
+    }
+
+    .qr-popup span {
+      font-size: 12px;
+      color: #666;
+      font-weight: 500;
+    }
+
+    .nav-link-container:hover .qr-popup {
+      display: block;
+    }
+
+    /* 地图控制按钮样式 */
+    .map-controls {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        z-index: 100;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .map-control-btn {
+        background: white;
+        border: none;
+        border-radius: 8px;
+        padding: 10px;
+        cursor: pointer;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        transition: all 0.3s ease;
+        font-size: 18px;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .map-control-btn:hover {
+        background: #dc3545;
+        color: white;
+        transform: scale(1.1);
+    }
+
+    .map-control-btn:active {
+        transform: scale(0.95);
+    }
+
+    /* 加载状态样式 */
+    .loading-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(255, 255, 255, 0.9);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10;
+        border-radius: 12px;
+    }
+
+    .loading-spinner {
+        width: 50px;
+        height: 50px;
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #dc3545;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    .hidden {
+        display: none !important;
+    }
+
+    /* 重置 body 样式 */
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        padding: 0;
+        margin: 0;
+        background-color: #f5f5f5;
+        line-height: 1.6;
+        color: #333;
+    }
+    
+    /* 主内容容器 */
+    .content-wrapper {
+        max-width: 1200px; /* 增加最大宽度 */
+        margin: 20px auto; /* 上下边距，左右居中 */
+        padding: 0 20px; /* 左右内边距 */
+        box-sizing: border-box;
+    }
+
+    /* 汉堡菜单样式 */
+    .mobile-menu-btn {
+        display: none;
+        background: none;
+        border: none;
+        color: white;
+        font-size: 24px;
+        cursor: pointer;
+        padding: 5px 10px;
+        margin-right: 10px;
+    }
+
+    .mobile-sidebar {
+        position: fixed;
+        top: 0;
+        left: -280px;
+        width: 280px;
+        height: 100%;
+        background: white;
+        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
+        z-index: 10001;
+        transition: left 0.3s ease;
+        overflow-y: auto;
+    }
+
+    .mobile-sidebar.active {
+        left: 0;
+    }
+
+    .mobile-sidebar-header {
+        background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+        color: white;
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .mobile-sidebar-header h3 {
+        margin: 0;
+        font-size: 18px;
+    }
+
+    .mobile-sidebar-close {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 28px;
+        cursor: pointer;
+        padding: 0;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .mobile-sidebar-nav {
+        padding: 0;
+        margin: 0;
+        list-style: none;
+    }
+
+    .mobile-sidebar-nav li {
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .mobile-sidebar-nav a {
+        display: block;
+        padding: 15px 20px;
+        color: #333;
+        text-decoration: none;
+        font-size: 16px;
+        transition: background-color 0.3s ease;
+    }
+
+    .mobile-sidebar-nav a:hover,
+    .mobile-sidebar-nav a:active {
+        background-color: rgba(220, 53, 69, 0.1);
+        color: #dc3545;
+    }
+
+    .mobile-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 10000;
+    }
+
+    .mobile-overlay.active {
+        display: block;
+    }
+
+    /* Tab切换样式 */
+    .map-list-tabs {
+        display: none;
+        background: white;
+        border-bottom: 2px solid #f0f0f0;
+        margin-bottom: 0;
+        position: relative;
+    }
+
+    .map-list-tabs button {
+        flex: 1;
+        padding: 15px;
+        background: none;
+        border: none;
+        border-bottom: 3px solid transparent;
+        color: #666;
+        font-size: 16px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .map-list-tabs button.active {
+        color: #dc3545;
+        border-bottom-color: #dc3545;
+    }
+
+    /* 地图折叠/展开功能 */
+    .map-toggle-container {
+        position: relative;
+    }
+
+    .map-toggle-btn {
+        position: absolute;
+        bottom: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(220, 53, 69, 0.95);
+        color: white;
+        border: none;
+        border-radius: 20px;
+        padding: 8px 20px;
+        font-size: 13px;
+        font-weight: 500;
+        cursor: pointer;
+        z-index: 100;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease;
+        display: none;
+    }
+
+    .map-toggle-btn:hover {
+        background: rgba(200, 35, 51, 0.95);
+        transform: translateX(-50%) translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .map-toggle-btn:active {
+        transform: translateX(-50%) translateY(0);
+    }
+
+    .map-collapsed {
+        height: 180px !important;
+        cursor: pointer;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .map-collapsed::after {
+        content: '👆 点击查看完整地图';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 60px;
+        background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.95));
+        pointer-events: none;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        padding-bottom: 10px;
+        font-size: 13px;
+        color: #666;
+        font-weight: 500;
+    }
+
+    .map-expanded {
+        height: 450px !important;
+        cursor: default;
+    }
+
+    .tab-content {
+        display: none;
+    }
+
+    .tab-content.active {
+        display: block;
+    }
+
+    /* 移动端可折叠信息区域 */
+    .info-accordion {
+        display: none;
+    }
+
+    .info-accordion-item {
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .info-accordion-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px;
+        background: white;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        user-select: none;
+    }
+
+    .info-accordion-header:active {
+        background-color: rgba(220, 53, 69, 0.05);
+    }
+
+    .info-accordion-header strong {
+        font-size: 14px;
+        color: #333;
+    }
+
+    .info-accordion-icon {
+        font-size: 18px;
+        color: #999;
+        transition: transform 0.3s ease;
+    }
+
+    .info-accordion-item.active .info-accordion-icon {
+        transform: rotate(180deg);
+    }
+
+    .info-accordion-content {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+    }
+
+    .info-accordion-item.active .info-accordion-content {
+        max-height: 500px;
+    }
+
+    .info-accordion-content p {
+        padding: 0 15px 15px 15px;
+        margin: 0;
+        font-size: 13px;
+        color: #666;
+        line-height: 1.8;
+    }
+
+    /* 触摸优化 */
+    @media (hover: none) and (pointer: coarse) {
+        /* 增大可点击区域 */
+        .map-control-btn,
+        .search-button,
+        .city-item,
+        .lang-btn {
+            min-height: 44px;
+            min-width: 44px;
+        }
+
+        /* 移除hover效果，使用active效果 */
+        .map-control-btn:hover,
+        .search-button:hover,
+        .city-item:hover {
+            transform: none;
+        }
+
+        .map-control-btn:active {
+            background: #dc3545;
+            color: white;
+            transform: scale(0.95);
+        }
+
+        .search-button:active {
+            transform: scale(0.95);
+        }
+
+        .city-item:active {
+            background: rgba(220, 53, 69, 0.1);
+            border-color: #dc3545;
+            color: #dc3545;
+        }
+    }
+
+    /* 城市选择器Modal样式 */
+    .city-modal-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 10000;
+        animation: fadeIn 0.3s ease;
+    }
+
+    .city-modal-overlay.active {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .city-modal {
+        background: white;
+        border-radius: 12px;
+        width: 90%;
+        max-width: 800px;
+        max-height: 80vh;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        animation: slideUp 0.3s ease;
+    }
+
+    .city-modal-header {
+        padding: 20px;
+        border-bottom: 1px solid #f0f0f0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .city-modal-header h3 {
+        margin: 0;
+        font-size: 18px;
+        color: #333;
+    }
+
+    .city-modal-close {
+        background: none;
+        border: none;
+        font-size: 24px;
+        color: #999;
+        cursor: pointer;
+        padding: 0;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        transition: all 0.3s ease;
+    }
+
+    .city-modal-close:hover {
+        background: #f0f0f0;
+        color: #333;
+    }
+
+    .city-search-box {
+        padding: 15px 20px;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .city-search-input {
+        width: 100%;
+        padding: 10px 15px;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        font-size: 14px;
+        transition: all 0.3s ease;
+    }
+
+    .city-search-input:focus {
+        outline: none;
+        border-color: #dc3545;
+        box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+    }
+
+    .city-modal-body {
+        flex: 1;
+        overflow-y: auto;
+        padding: 20px;
+    }
+
+    .city-section {
+        margin-bottom: 25px;
+    }
+
+    .city-section-title {
+        font-size: 14px;
+        color: #999;
+        margin-bottom: 12px;
+        font-weight: 600;
+    }
+
+    .city-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        gap: 10px;
+    }
+
+    .city-item {
+        padding: 10px 15px;
+        background: #f8f9fa;
+        border: 1px solid #e0e0e0;
+        border-radius: 6px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 14px;
+        color: #333;
+    }
+
+    .city-item:hover {
+        background: rgba(220, 53, 69, 0.1);
+        border-color: #dc3545;
+        color: #dc3545;
+        transform: translateY(-2px);
+    }
+
+    .city-item.current {
+        background: #dc3545;
+        color: white;
+        border-color: #dc3545;
+    }
+
+    .city-letter-group {
+        margin-bottom: 20px;
+    }
+
+    .city-letter {
+        font-size: 16px;
+        font-weight: 600;
+        color: #dc3545;
+        margin-bottom: 10px;
+        padding-bottom: 5px;
+        border-bottom: 2px solid #dc3545;
+    }
+
+    /* 移动端样式 - Drawer */
+    @media (max-width: 768px) {
+        .city-modal-overlay.active {
+            align-items: flex-end;
+        }
+
+        .city-modal {
+            width: 100%;
+            max-width: 100%;
+            max-height: 85vh;
+            border-radius: 12px 12px 0 0;
+            animation: slideUpMobile 0.3s ease;
+        }
+
+        .city-grid {
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+
+        .city-item {
+            padding: 12px 8px;
+            font-size: 13px;
+        }
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    @keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translateY(50px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes slideUpMobile {
+        from {
+            transform: translateY(100%);
+        }
+        to {
+            transform: translateY(0);
+        }
+    }
+
+    /* 地点搜索样式 */
+    .location-search-container {
+        position: relative;
+        flex: 1;
+        min-width: 200px;
+    }
+
+    .search-suggestions {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: white;
+        border: 2px solid #dc3545;
+        border-top: none;
+        border-radius: 0 0 6px 6px;
+        max-height: 300px;
+        overflow-y: auto;
+        z-index: 1000;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        display: none;
+    }
+
+    .search-suggestions.active {
+        display: block;
+    }
+
+    .suggestion-item {
+        padding: 12px 15px;
+        cursor: pointer;
+        border-bottom: 1px solid #f0f0f0;
+        transition: background-color 0.2s ease;
+    }
+
+    .suggestion-item:last-child {
+        border-bottom: none;
+    }
+
+    .suggestion-item:hover {
+        background-color: rgba(220, 53, 69, 0.05);
+    }
+
+    .suggestion-item strong {
+        color: #333;
+        font-size: 14px;
+        display: block;
+        margin-bottom: 4px;
+    }
+
+    .suggestion-item span {
+        color: #999;
+        font-size: 12px;
+    }
+
+    .search-button {
+        padding: 6px 16px;
+        background: #dc3545;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        white-space: nowrap;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .search-button:hover {
+        background: #c82333;
+        transform: translateY(-1px);
+        box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3);
+    }
+
+    .search-button:active {
+        transform: translateY(0);
+    }
+
+    .search-button:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    /* 控制和信息区域 */
+    .controls-info {
+        background-color: #fff;
+        padding: 15px 20px;
+        margin-bottom: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    .info-box {
+        background-color: #fff;
+        padding: 25px;
+        margin-top: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    .info-section {
+        margin-bottom: 20px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .info-section:last-child {
+        margin-bottom: 0;
+        padding-bottom: 0;
+        border-bottom: none;
+    }
+
+    .info-section strong {
+        display: block;
+        color: #333;
+        font-size: 15px;
+        margin-bottom: 10px;
+    }
+
+    .info-box p {
+        margin: 0;
+        font-size: 14px;
+        color: #666;
+        line-height: 1.8;
+    }
+
+    /* 地图和列表容器 */
+    .map-list-container {
+        display: flex;
+        gap: 20px; /* 地图和列表之间的间隙 */
+    }
+
+    /* 地图容器样式 */
+    #mapContainer { 
+        flex: 2;
+        height: 600px; 
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        position: relative;
+    }
+
+    /* 距离列表容器样式 */
+    #distanceList { 
+        flex: 1;
+        height: 600px; 
+        overflow-y: auto; 
+        background-color: #fff;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        box-sizing: border-box;
+    }
+
+    #distanceList h2 { 
+        font-size: 18px; 
+        margin: 0 0 20px 0;
+        color: #333;
+        font-weight: 600;
+        border-bottom: 2px solid #dc3545;
+        padding-bottom: 12px;
+    }
+    
+    #nearestLocation {
+        background: linear-gradient(135deg, rgba(220, 53, 69, 0.1) 0%, rgba(200, 35, 51, 0.1) 100%);
+        border: 2px solid rgba(220, 53, 69, 0.3);
+        color: #dc3545;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        font-size: 14px;
+        line-height: 1.6;
+    }
+    #nearestLocation strong {
+        font-weight: 600;
+        color: #c82333;
+    }
+
+    #distanceList ul { 
+        list-style-type: none; 
+        padding: 0; 
+        margin: 0;
+    }
+
+    #distanceList li { 
+        padding: 12px 8px;
+        border-bottom: 1px solid #f0f0f0;
+        font-size: 14px;
+        color: #555;
+        transition: all 0.3s ease;
+    }
+    #distanceList li:hover {
+        background-color: rgba(220, 53, 69, 0.05);
+        transform: translateX(5px);
+    }
+    #distanceList li:last-child {
+        border-bottom: none;
+    }
+    
+    #distanceList li strong {
+        color: #333;
+        font-size: 14px;
+    }
+
+    /* 页脚样式 */
+    .footer {
+        background: #f8f9fa;
+        border-top: 1px solid #e0e0e0;
+        padding: 2rem 0 1.5rem;
+        margin-top: 3rem;
+    }
+
+    .footer-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+        text-align: center;
+    }
+
+    .footer-text {
+        color: #666;
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+        line-height: 1.6;
+    }
+
+    .footer-separator {
+        margin: 0 0.5rem;
+        color: #ccc;
+    }
+
+    .footer-beian {
+        margin: 0;
+    }
+
+    .footer-beian a {
+        color: #888;
+        text-decoration: none;
+        font-size: 0.85rem;
+        transition: color 0.3s ease;
+    }
+
+    .footer-beian a:hover {
+        color: #dc3545;
+        text-decoration: underline;
+    }
+
+    /* 移动端适配 */
+    @media (max-width: 768px) {
+        /* 显示汉堡菜单按钮 */
+        .mobile-menu-btn {
+            display: block;
+        }
+
+        /* 隐藏桌面导航链接 */
+        .nav-links {
+            display: none;
+        }
+
+        /* 隐藏Tab切换（使用折叠地图代替） */
+        .map-list-tabs {
+            display: none;
+        }
+
+        /* 显示地图折叠按钮 */
+        .map-toggle-btn {
+            display: block;
+        }
+
+        /* 隐藏桌面版info-box，显示移动版accordion */
+        .info-box {
+            display: none;
+        }
+
+        .info-accordion {
+            display: block;
+            background: white;
+            border-radius: 12px;
+            margin-top: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+
+        /* 调整logo-bar布局 */
+        .logo-bar {
+            padding: 10px 15px;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-container {
+            flex: 1;
+            justify-content: flex-start;
+        }
+
+        .content-wrapper {
+            margin: 10px auto;
+            padding: 0 10px;
+        }
+
+        .controls-info {
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .controls-info > div {
+            flex-direction: column;
+            align-items: stretch !important;
+            gap: 12px !important;
+        }
+
+        .controls-info > div > div {
+            width: 100% !important;
+            flex: none !important;
+            min-width: 100% !important;
+        }
+
+        /* 移动端标签和输入框调整 */
+        .controls-info label {
+            font-size: 13px;
+            margin-bottom: 3px !important;
+        }
+
+        .controls-info label span {
+            display: none; /* 隐藏快捷键提示 */
+        }
+
+        .controls-info input,
+        .controls-info button {
+            height: 38px !important;
+        }
+
+        #cityInput {
+            font-size: 14px;
+            padding: 8px 30px 8px 10px !important;
+        }
+
+        .map-list-container {
+            flex-direction: column;
+            gap: 15px;
+            position: relative;
+        }
+
+        #mapContainer, #distanceList {
+            flex: none;
+            width: 100%;
+        }
+
+        /* 地图默认折叠状态 */
+        #mapContainer {
+            height: 180px;
+            position: relative;
+            transition: height 0.4s ease;
+        }
+
+        /* 列表自动填充空间 */
+        #distanceList {
+            height: auto;
+            min-height: 400px;
+            max-height: none;
+            padding: 15px;
+            overflow-y: auto;
+        }
+        #distanceList h2 {
+            font-size: 16px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+        }
+        #nearestLocation {
+            font-size: 13px;
+            padding: 12px;
+        }
+        #distanceList li {
+            font-size: 13px;
+            padding: 10px 5px;
+        }
+
+        .logo-img {
+          height: 30px;
+        }
+
+        .logo-text {
+          font-size: 18px;
+        }
+
+        .map-controls {
+            top: 10px;
+            right: 10px;
+            gap: 8px;
+        }
+
+        .map-control-btn {
+            width: 36px;
+            height: 36px;
+            font-size: 16px;
+            padding: 8px;
+        }
+
+        .footer {
+            padding: 1.5rem 0 1rem;
+            margin-top: 2rem;
+        }
+
+        .footer-text {
+            font-size: 0.8rem;
+            line-height: 1.8;
+        }
+
+        .footer-beian a {
+            font-size: 0.75rem;
+        }
+    }
+    
+    /* 原有样式 */
+    /* 移除不再需要的样式，例如 float 和 border-left */
+
+    </style>
+</head>
+<body>
+    <!-- 移动端遮罩层 -->
+    <div id="mobileOverlay" class="mobile-overlay" onclick="closeMobileMenu()"></div>
+
+    <!-- 移动端侧边栏 -->
+    <aside id="mobileSidebar" class="mobile-sidebar">
+        <div class="mobile-sidebar-header">
+            <h3 data-zh="菜单" data-en="Menu">菜单</h3>
+            <button class="mobile-sidebar-close" onclick="closeMobileMenu()" aria-label="关闭菜单">×</button>
+        </div>
+        <ul class="mobile-sidebar-nav">
+            <li><a href="../home/" data-zh="主页" data-en="Home">主页</a></li>
+            <li><a href="../map/" data-zh="地图" data-en="Map Tool">地区</a></li>
+            <li><a href="https://ima.qq.com/wiki/?shareId=bdfa0317e16a8a3890ff9c7ac4811369bda5affce903b96b756f13693a5623a7" target="_blank" data-zh="知识库" data-en="Knowledge Base">知识库</a></li>
+            <li><a href="../period/" data-zh="月经估算" data-en="Period Calculator">月经估算</a></li>
+            <li><a href="../education/" data-zh="科普" data-en="Education">科普</a></li>
+            <li><a href="../quiz/" data-zh="问卷" data-en="Questionnaires">问卷</a></li>
+            <li><a href="../news/" data-zh="新闻" data-en="News">新闻</a></li>
+            <li><a href="../contact/" data-zh="联系方式" data-en="Contact">联系方式</a></li>
+        </ul>
+    </aside>
+
+    <!-- 顶部导航栏 -->
+    <nav class="top-nav">
+      <div class="logo-bar">
+        <button class="mobile-menu-btn" onclick="openMobileMenu()" aria-label="打开菜单">☰</button>
+        <div class="logo-container">
+          <img src="../home/logo.png" alt="血友姐妹会" class="logo-img">
+          <a href="../home/" style="text-decoration: none;">
+            <span class="logo-text" data-zh="血友姐妹会" data-en="Hemophilia Sisters">血友姐妹会</span>
+          </a>
+        </div>
+        <div class="nav-controls">
+          <div class="language-switch">
+            <button id="lang-zh" class="lang-btn active">中文</button>
+            <button id="lang-en" class="lang-btn">English</button>
+          </div>
+        </div>
+      </div>
+      <div class="nav-links">
+        <a href="../home/" data-zh="主页" data-en="Home">主页</a>
+        <a href="../map/" data-zh="地图" data-en="Map Tool">地区</a>
+        <a href="https://ima.qq.com/wiki/?shareId=bdfa0317e16a8a3890ff9c7ac4811369bda5affce903b96b756f13693a5623a7" target="_blank" data-zh="知识库" data-en="Knowledge Base">知识库</a>
+        <a href="../period/" data-zh="月经估算" data-en="Period Calculator">月经估算</a>
+        <a href="../education/" data-zh="科普" data-en="Education">科普</a>
+        <a href="../quiz/" data-zh="问卷" data-en="Questionnaires">问卷</a>
+        <a href="../news/" data-zh="新闻" data-en="News">新闻</a>
+        <a href="../contact/" data-zh="联系方式" data-en="Contact">联系方式</a>
+      </div>
+    </nav>
+
+    <!-- 主内容区域 -->
+    <div class="content-wrapper">
+      <!-- 控制和信息区域 -->
+      <div class="controls-info">
+        <!-- 搜索和城市选择器 -->
+        <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end;">
+            <!-- 1. 城市选择器 -->
+            <div style="flex: 0 0 200px; min-width: 150px;">
+                <label for="cityInput" style="display: block; margin-bottom: 3px; font-size: 13px;" data-zh="城市：" data-en="City:">城市：</label>
+                <div style="position: relative;">
+                    <input type="text" id="cityInput" readonly placeholder="选择城市..." 
+                        data-zh-placeholder="选择城市..." 
+                        data-en-placeholder="Select city..."
+                        style="width: 100%; padding: 6px 30px 6px 10px; border: 2px solid #dc3545; border-radius: 6px; font-size: 14px; cursor: pointer; background: white; height: 36px;"
+                        onclick="openCitySelector()"
+                        aria-label="选择城市">
+                    <span style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); pointer-events: none; color: #999; font-size: 12px;">▼</span>
+                </div>
+            </div>
+
+            <!-- 2. 地点搜索 -->
+            <div class="location-search-container" style="flex: 1; min-width: 250px;">
+                <label for="locationSearch" style="display: block; margin-bottom: 3px; font-size: 13px;" data-zh="搜索地址或地点：" data-en="Search Location:">
+                    搜索地址或地点：
+                    <span style="font-size: 11px; color: #999; font-weight: normal;">(Ctrl+K)</span>
+                </label>
+                <div style="display: flex; gap: 6px;">
+                    <input type="text" id="locationSearch" placeholder="输入地址、地标、酒店、诊所名称等..." 
+                        data-zh-placeholder="输入地址、地标、酒店、诊所名称等..." 
+                        data-en-placeholder="Enter address, landmark, hotel, clinic name..."
+                        style="flex: 1; padding: 6px 10px; border: 2px solid #dc3545; border-radius: 6px; font-size: 14px; height: 36px;"
+                        oninput="handleLocationInput()"
+                        onkeypress="handleLocationKeyPress(event)"
+                        aria-label="搜索地点">
+                    <button class="search-button" onclick="searchCurrentLocation()" data-zh="搜索" data-en="Search" style="height: 36px; padding: 6px 16px;">
+                        🔍 搜索
+                    </button>
+                </div>
+                <div id="searchSuggestions" class="search-suggestions"></div>
+            </div>
+        </div>
+      </div>
+
+      <!-- 地图和列表容器 -->
+      <div class="map-list-container">
+        <!-- 地图容器 -->
+        <div id="mapContainer" class="tab-content active map-toggle-container" role="application" aria-label="诊所地图" onclick="handleMapClick(event)">
+            <div id="mapLoading" class="loading-overlay" aria-label="地图加载中">
+                <div class="loading-spinner"></div>
+            </div>
+            <!-- 地图控制按钮 -->
+            <div class="map-controls">
+                <button class="map-control-btn" onclick="relocateUser()" 
+                    title="返回我的位置 (Ctrl+L)" 
+                    aria-label="返回我的位置"
+                    data-zh-title="返回我的位置 (Ctrl+L)" 
+                    data-en-title="Back to my location (Ctrl+L)">📍      </button>
+            </div>
+            <!-- 地图折叠/展开按钮 -->
+            <button id="mapToggleBtn" class="map-toggle-btn" onclick="toggleMapSize()" 
+                data-zh="👆 点击展开地图" 
+                data-en="👆 Tap to expand map">
+                  点击展开地图
+            </button>
+        </div>
+        <!-- 距离列表容器 -->
+        <div id="distanceList" role="region" aria-label="诊所列表">
+            <h2 data-zh="离您最近的诊所或医院：" data-en="Nearest Clinics:">离您最近的诊所或医院：</h2>
+            <div id="nearestLocation" role="status" aria-live="polite" data-zh="正在获取位置信息..." data-en="Getting location...">正在获取位置信息...</div>
+            <ul id="distanceUl" role="list"></ul>
+        </div>
+      </div>
+
+      <!-- 文字说明区域 -->
+      <div class="info-box">
+        <div class="info-section">
+            <strong data-zh="🔍 如何使用：" data-en="🔍 How to Use:">🔍 如何使用：</strong>
+            <p>
+                <strong>方式一：</strong>选择城市 - 点击城市选择框，从列表中选择或搜索城市<br>
+                <strong>方式二：</strong>搜索地点 - 输入地址、地标、酒店、诊所名称等，查看附近诊所<br>
+                <span style="color: #999; font-size: 13px; margin-left: 20px;">例如：杭州东站、上海浦东机场、西湖、某某酒店、某某诊所</span><br>
+                <strong>方式三：</strong>自动定位 - 允许浏览器获取位置，自动显示附近诊所
+            </p>
+        </div>
+        
+        <div class="info-section">
+            <strong data-zh="定位说明：" data-en="Location Info:">定位说明：</strong>
+            <p data-zh="系统会自动尝试获取您的当前位置。如果定位失败或您想查看其他地方的诊所，可以使用上述任一方式进行查询。所有位置信息仅用于本次查询，不会被保存。" 
+               data-en="We will automatically try to get your current location and show the nearest clinics. If location fails, you can manually select your city. Location data is only used for this query and will not be saved.">
+               系统会自动尝试获取您的当前位置。如果定位失败或您想查看其他地方的诊所，可以使用上述任一方式进行查询。所有位置信息仅用于本次查询，不会被保存。
+            </p>
+        </div>
+        
+        <div class="info-section">
+            <strong data-zh="免责声明：" data-en="Disclaimer:">免责声明：</strong>
+            <p data-zh="本地图中的诊所信息主要来源于病友投稿及公开信息整理，仅供参考。由于医疗机构政策可能随时调整，我们无法保证所有信息的实时性和准确性。建议在前往前，通过电话提前联系相关机构确认是否可提供注射服务。" 
+               data-en="The clinic information in this map is mainly from patient contributions and public information, for reference only. We cannot guarantee the timeliness and accuracy of all information. Please contact the clinic by phone before visiting.">
+               本地图中的诊所信息主要来源于病友投稿及公开信息整理，仅供参考。由于医疗机构政策可能随时调整，我们无法保证所有信息的实时性和准确性。建议在前往前，通过电话提前联系相关机构确认是否可提供注射服务。
+            </p>
+        </div>
+        
+        <div class="info-section">
+            <strong data-zh="使用建议：" data-en="Usage Tips:">使用建议：</strong>
+            <p data-zh="部分地点坐标可能存在偏差，建议结合高德地图、百度地图、腾讯地图等导航软件辅助使用。本地图不构成任何医疗建议或医疗服务推荐。因使用本地图信息而产生的任何风险或损失，需由使用者自行承担。" 
+               data-en="Some location coordinates may have deviations. We recommend using navigation apps for assistance. This map does not constitute any medical advice. Users bear all risks from using this information.">
+               部分地点坐标可能存在偏差，建议结合高德地图、百度地图、腾讯地图等导航软件辅助使用。本地图不构成任何医疗建议或医疗服务推荐。因使用本地图信息而产生的任何风险或损失，需由使用者自行承担。
+            </p>
+        </div>
+        
+        <div class="info-section">
+            <strong data-zh="⌨️ 快捷键：" data-en="⌨️ Shortcuts:">⌨️ 快捷键：</strong>
+            <p>
+                <span style="display: inline-block; margin-right: 15px;">Ctrl+F / Ctrl+K: 搜索地点</span>
+                <span style="display: inline-block; margin-right: 15px;">Ctrl+L: 返回我的位置</span>
+                <span style="display: inline-block;">ESC: 清空搜索</span>
+            </p>
+        </div>
+        
+        <div class="info-section">
+            <strong data-zh="联系我们：" data-en="Contact Us:">联系我们：</strong>
+            <p data-zh="本地图由南昌市血之友公益协会制作，旨在为血友朋友提供便利的信息支持。如发现信息有误或希望投稿补充，欢迎提交到「关于征集方便血友病患者外出临时注射凝血因子诊所信息的问卷」或联系我们。" 
+               data-en="This map is created by Nanchang Hemophilia Association. If you find any errors or want to contribute, please submit to our questionnaire or contact us:">
+               本地图由南昌市血之友公益协会制作，旨在为血友朋友提供便利的信息支持。如发现信息有误或希望投稿补充，欢迎提交到<a href="https://lxi.me/1Wg195" target="_blank" style="color: #dc3545; text-decoration: none;">「关于征集方便血友病患者外出临时注射凝血因子诊所信息的问卷」</a>或联系我们。
+            </p>
+            <p style="margin-top: 8px;">
+                <span data-zh="问卷：" data-en="Questionnaire: ">问卷：</span><a href="https://lxi.me/1Wg195" target="_blank" style="color: #dc3545; text-decoration: none;">https://lxi.me/1Wg195</a>
+            </p>
+            <p style="margin-top: 8px;">
+                <span data-zh="邮箱：" data-en="Email: ">邮箱：</span><a href="mailto:wgh38417@163.com" style="color: #dc3545; text-decoration: none;">wgh38417@163.com</a> | 
+                <span data-zh="微信：" data-en="WeChat: ">微信：</span>wgh38417
+            </p>
+        </div>
+      </div>
+
+      <!-- 移动端可折叠信息区域 -->
+      <div class="info-accordion">
+        <div class="info-accordion-item">
+            <div class="info-accordion-header" onclick="toggleAccordion(this)">
+                <strong data-zh="🔍 如何使用" data-en="🔍 How to Use">🔍 如何使用</strong>
+                <span class="info-accordion-icon">▼</span>
+            </div>
+            <div class="info-accordion-content">
+                <p>
+                    <strong>方式一：</strong>选择城市 - 点击城市选择框，从列表中选择或搜索城市<br>
+                    <strong>方式二：</strong>搜索地点 - 输入地址、地标、酒店、诊所名称等，查看附近诊所<br>
+                    <span style="color: #999; font-size: 12px; margin-left: 20px;">例如：杭州东站、上海浦东机场、西湖、某某酒店、某某诊所</span><br>
+                    <strong>方式三：</strong>自动定位 - 允许浏览器获取位置，自动显示附近诊所
+                </p>
+            </div>
+        </div>
+
+        <div class="info-accordion-item">
+            <div class="info-accordion-header" onclick="toggleAccordion(this)">
+                <strong data-zh="📍 定位说明" data-en="📍 Location Info">📍 定位说明</strong>
+                <span class="info-accordion-icon">▼</span>
+            </div>
+            <div class="info-accordion-content">
+                <p data-zh="系统会自动尝试获取您的当前位置。如果定位失败或您想查看其他地方的诊所，可以使用上述任一方式进行查询。所有位置信息仅用于本次查询，不会被保存。" 
+                   data-en="We will automatically try to get your current location and show the nearest clinics. If location fails, you can manually select your city. Location data is only used for this query and will not be saved.">
+                   系统会自动尝试获取您的当前位置。如果定位失败或您想查看其他地方的诊所，可以使用上述任一方式进行查询。所有位置信息仅用于本次查询，不会被保存。
+                </p>
+            </div>
+        </div>
+
+        <div class="info-accordion-item">
+            <div class="info-accordion-header" onclick="toggleAccordion(this)">
+                <strong data-zh="⚠️ 免责声明" data-en="⚠️ Disclaimer">⚠️ 免责声明</strong>
+                <span class="info-accordion-icon">▼</span>
+            </div>
+            <div class="info-accordion-content">
+                <p data-zh="本地图中的诊所信息主要来源于病友投稿及公开信息整理，仅供参考。由于医疗机构政策可能随时调整，我们无法保证所有信息的实时性和准确性。建议在前往前，通过电话提前联系相关机构确认是否可提供注射服务。" 
+                   data-en="The clinic information in this map is mainly from patient contributions and public information, for reference only. We cannot guarantee the timeliness and accuracy of all information. Please contact the clinic by phone before visiting.">
+                   本地图中的诊所信息主要来源于病友投稿及公开信息整理，仅供参考。由于医疗机构政策可能随时调整，我们无法保证所有信息的实时性和准确性。建议在前往前，通过电话提前联系相关机构确认是否可提供注射服务。
+                </p>
+            </div>
+        </div>
+
+        <div class="info-accordion-item">
+            <div class="info-accordion-header" onclick="toggleAccordion(this)">
+                <strong data-zh="💡 使用建议" data-en="💡 Usage Tips">💡 使用建议</strong>
+                <span class="info-accordion-icon">▼</span>
+            </div>
+            <div class="info-accordion-content">
+                <p data-zh="部分地点坐标可能存在偏差，建议结合高德地图、百度地图、腾讯地图等导航软件辅助使用。本地图不构成任何医疗建议或医疗服务推荐。因使用本地图信息而产生的任何风险或损失，需由使用者自行承担。" 
+                   data-en="Some location coordinates may have deviations. We recommend using navigation apps for assistance. This map does not constitute any medical advice. Users bear all risks from using this information.">
+                   部分地点坐标可能存在偏差，建议结合高德地图、百度地图、腾讯地图等导航软件辅助使用。本地图不构成任何医疗建议或医疗服务推荐。因使用本地图信息而产生的任何风险或损失，需由使用者自行承担。
+                </p>
+            </div>
+        </div>
+
+        <div class="info-accordion-item">
+            <div class="info-accordion-header" onclick="toggleAccordion(this)">
+                <strong data-zh="📧 联系我们" data-en="📧 Contact Us">📧 联系我们</strong>
+                <span class="info-accordion-icon">▼</span>
+            </div>
+            <div class="info-accordion-content">
+                <p data-zh="本地图由南昌市血之友公益协会制作，旨在为血友朋友提供便利的信息支持。如发现信息有误或希望投稿补充，欢迎提交到「关于征集方便血友病患者外出临时注射凝血因子诊所信息的问卷」或联系我们。" 
+                   data-en="This map is created by Nanchang Hemophilia Association. If you find any errors or want to contribute, please submit to our questionnaire or contact us:">
+                   本地图由南昌市血之友公益协会制作，旨在为血友朋友提供便利的信息支持。如发现信息有误或希望投稿补充，欢迎提交到<a href="https://lxi.me/1Wg195" target="_blank" style="color: #dc3545; text-decoration: none;">「关于征集方便血友病患者外出临时注射凝血因子诊所信息的问卷」</a>或联系我们。
+                </p>
+                <p style="margin-top: 8px;">
+                    <span data-zh="问卷：" data-en="Questionnaire: ">问卷：</span><a href="https://lxi.me/1Wg195" target="_blank" style="color: #dc3545; text-decoration: none;">https://lxi.me/1Wg195</a>
+                </p>
+                <p style="margin-top: 8px;">
+                    <span data-zh="邮箱：" data-en="Email: ">邮箱：</span><a href="mailto:wgh38417@163.com" style="color: #dc3545; text-decoration: none;">wgh38417@163.com</a> | 
+                    <span data-zh="微信：" data-en="WeChat: ">微信：</span>wgh38417
+                </p>
+            </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 城市选择器Modal -->
+    <div id="cityModalOverlay" class="city-modal-overlay" onclick="closeCitySelector(event)">
+        <div class="city-modal" onclick="event.stopPropagation()">
+            <div class="city-modal-header">
+                <h3 data-zh="选择城市" data-en="Select City">选择城市</h3>
+                <button class="city-modal-close" onclick="closeCitySelector()" aria-label="关闭">×</button>
+            </div>
+            
+            <div class="city-search-box">
+                <input type="text" id="citySearchInput" class="city-search-input" 
+                    placeholder="搜索城市（支持拼音）" 
+                    data-zh-placeholder="搜索城市（支持拼音）"
+                    data-en-placeholder="Search city (Pinyin supported)"
+                    oninput="filterCities()"
+                    aria-label="搜索城市">
+            </div>
+            
+            <div class="city-modal-body" id="cityModalBody">
+                <!-- 当前定位城市 -->
+                <div class="city-section" id="currentCitySection" style="display: none;">
+                    <div class="city-section-title">📍 当前定位</div>
+                    <div class="city-grid" id="currentCityGrid"></div>
+                </div>
+                
+                <!-- 热门城市 -->
+                <div class="city-section">
+                    <div class="city-section-title">🔥 热门城市</div>
+                    <div class="city-grid" id="hotCitiesGrid"></div>
+                </div>
+                
+                <!-- 全部城市 -->
+                <div class="city-section" id="allCitiesSection">
+                    <div class="city-section-title">🏙️ 全部城市</div>
+                    <div id="allCitiesContainer"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 页脚备案信息 -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p class="footer-text">
+                <span data-zh="南昌市血之友公益协会" data-en="Nanchang Hemophilia Association">南昌市血之友公益协会</span>
+                <span class="footer-separator">|</span>
+                <span>xueyou.xyz</span>
+            </p>
+            <p class="footer-beian">
+                <a href="https://beian.miit.gov.cn" target="_blank" rel="noopener noreferrer">
+                    赣ICP备2025065719号-2
+                </a>
+            </p>
+        </div>
+    </footer>
+
+    <script src="../home/i18n.js"></script>
+
+    <!-- 配置高德地图的安全密钥 -->
+    <script type="text/javascript">
+        window._AMapSecurityConfig = {
+            securityJsCode: "0854475160df95a7068faef69115f2b4", // 替换成你的安全密钥
+        };
+    </script>
+
+    <!-- 加载高德地图API -->
+    <script
+        type="text/javascript"
+        src="https://webapi.amap.com/maps?v=2.0&key=5b486848a482bd35af8f514b37f161aa&plugin=AMap.MarkerCluster,AMap.Geocoder,AMap.PlaceSearch,AMap.AutoComplete"> <!-- 替换成你的key -->
+    </script>
+
+
+    <script>
+        // 性能监控
+        var performanceData = {
+            startTime: Date.now(),
+            markersLoaded: false,
+            mapLoaded: false
+        };
+
+        // 初始化地图
+        var map = new AMap.Map('mapContainer', {
+            zoom: 12,
+            mapStyle: 'amap://styles/normal',
+            resizeEnable: true
+        });
+
+        // 地图加载完成后隐藏loading
+        map.on('complete', function() {
+            document.getElementById('mapLoading').classList.add('hidden');
+            performanceData.mapLoaded = true;
+            console.log('地图加载完成，耗时: ' + (Date.now() - performanceData.startTime) + 'ms');
+        });
+
+        // 错误处理
+        window.addEventListener('error', function(e) {
+            console.error('页面错误:', e.error);
+            if (e.error && e.error.message && e.error.message.indexOf('AMap') !== -1) {
+                document.getElementById('nearestLocation').innerHTML = 
+                    '<span style="color: #dc3545;">地图加载失败，请刷新页面重试</span>';
+            }
+        });
+
+        var markers = []; // 存储所有标记
+        var cluster = null; // 标记聚合器
+        var infoWindow = new AMap.InfoWindow({
+            offset: new AMap.Pixel(0, -30)
+        });
+        
+        // 地点搜索相关
+        var searchMarker = null; // 搜索地点的标记
+        var autoComplete = null; // 自动完成
+        var placeSearch = null; // 地点搜索
+        var geocoder = null; // 地理编码
+        var searchTimeout = null;
+        var currentSelectedCity = '南昌市'; // 当前选择的城市
+        var detectedCity = null; // 检测到的城市
+        
+        // 城市数据（带拼音）
+        var cityData = {
+            hotCities: [
+                { name: '南昌市', pinyin: 'nanchang', province: '江西省' },
+                { name: '北京市', pinyin: 'beijing', province: '直辖市' },
+                { name: '上海市', pinyin: 'shanghai', province: '直辖市' },
+                { name: '广州市', pinyin: 'guangzhou', province: '广东省' },
+                { name: '深圳市', pinyin: 'shenzhen', province: '广东省' },
+                { name: '杭州市', pinyin: 'hangzhou', province: '浙江省' },
+                { name: '成都市', pinyin: 'chengdu', province: '四川省' },
+                { name: '武汉市', pinyin: 'wuhan', province: '湖北省' }
+            ],
+            allCities: {
+                'A': [{ name: '阿拉尔市', pinyin: 'alaer', province: '新疆维吾尔自治区' }],
+                'B': [{ name: '巴彦淖尔市', pinyin: 'bayannaoer', province: '内蒙古自治区' }, { name: '巴音郭楞蒙古自治州', pinyin: 'bayinguoleng', province: '新疆维吾尔自治区' }],
+                'C': [{ name: '常州市', pinyin: 'changzhou', province: '江苏省' }, { name: '成都市', pinyin: 'chengdu', province: '四川省' }, { name: '昌吉回族自治州', pinyin: 'changji', province: '新疆维吾尔自治区' }, { name: '昌吉市', pinyin: 'changji', province: '新疆维吾尔自治区' }, { name: '沧州市', pinyin: 'cangzhou', province: '河北省' }],
+                'D': [{ name: '东莞市', pinyin: 'dongguan', province: '广东省' }, { name: '东营市', pinyin: 'dongying', province: '山东省' }],
+                'E': [{ name: '鄂尔多斯市', pinyin: 'eerduosi', province: '内蒙古自治区' }],
+                'F': [{ name: '丰城市', pinyin: 'fengcheng', province: '江西省' }, { name: '抚州市', pinyin: 'fuzhou', province: '江西省' }, { name: '福州市', pinyin: 'fuzhou', province: '福建省' }, { name: '阜阳市', pinyin: 'fuyang', province: '安徽省' }],
+                'G': [{ name: '赣州市', pinyin: 'ganzhou', province: '江西省' }, { name: '高安市', pinyin: 'gaoan', province: '江西省' }],
+                'H': [{ name: '合肥市', pinyin: 'hefei', province: '安徽省' }, { name: '哈密市', pinyin: 'hami', province: '新疆维吾尔自治区' }, { name: '杭州市', pinyin: 'hangzhou', province: '浙江省' }, { name: '淮安市', pinyin: 'huaian', province: '江苏省' }, { name: '湖州市', pinyin: 'huzhou', province: '浙江省' }, { name: '菏泽市', pinyin: 'heze', province: '山东省' }, { name: '邯郸市', pinyin: 'handan', province: '河北省' }],
+                'I': [],
+                'J': [{ name: '九江市', pinyin: 'jiujiang', province: '江西省' }, { name: '吉安市', pinyin: 'jian', province: '江西省' }, { name: '景德镇市', pinyin: 'jingdezhen', province: '江西省' }, { name: '济南市', pinyin: 'jinan', province: '山东省' }],
+                'K': [],
+                'L': [{ name: '临沂市', pinyin: 'linyi', province: '山东省' }],
+                'M': [{ name: '梅州市', pinyin: 'meizhou', province: '广东省' }],
+                'N': [{ name: '南宁市', pinyin: 'nanning', province: '广西壮族自治区' }, { name: '南昌市', pinyin: 'nanchang', province: '江西省' }, { name: '宁德市', pinyin: 'ningde', province: '福建省' }],
+                'O': [],
+                'P': [{ name: '平凉市', pinyin: 'pingliang', province: '甘肃省' }, { name: '萍乡市', pinyin: 'pingxiang', province: '江西省' }],
+                'Q': [],
+                'R': [],
+                'S': [{ name: '上海市', pinyin: 'shanghai', province: '直辖市' }, { name: '上饶市', pinyin: 'shangrao', province: '江西省' }, { name: '厦门市', pinyin: 'xiamen', province: '福建省' }, { name: '宿州市', pinyin: 'suzhou', province: '安徽省' }, { name: '深圳市', pinyin: 'shenzhen', province: '广东省' }, { name: '石河子市', pinyin: 'shihezi', province: '新疆维吾尔自治区' }],
+                'T': [{ name: '唐山市', pinyin: 'tangshan', province: '河北省' }, { name: '塔城市', pinyin: 'tacheng', province: '新疆维吾尔自治区' }, { name: '天津市', pinyin: 'tianjin', province: '直辖市' }],
+                'U': [],
+                'V': [],
+                'W': [{ name: '乌鲁木齐市', pinyin: 'wulumuqi', province: '新疆维吾尔自治区' }, { name: '五家渠市', pinyin: 'wujiaqu', province: '新疆维吾尔自治区' }, { name: '无锡市', pinyin: 'wuxi', province: '江苏省' }, { name: '梧州市', pinyin: 'wuzhou', province: '广西壮族自治区' }, { name: '武汉市', pinyin: 'wuhan', province: '湖北省' }, { name: '温州市', pinyin: 'wenzhou', province: '浙江省' }],
+                'X': [{ name: '新余市', pinyin: 'xinyu', province: '江西省' }, { name: '西宁市', pinyin: 'xining', province: '青海省' }],
+                'Y': [{ name: '宜春市', pinyin: 'yichun', province: '江西省' }, { name: '盐城市', pinyin: 'yancheng', province: '江苏省' }, { name: '银川市', pinyin: 'yinchuan', province: '宁夏回族自治区' }, { name: '鹰潭市', pinyin: 'yingtan', province: '江西省' }],
+                'Z': [{ name: '株洲市', pinyin: 'zhuzhou', province: '湖南省' }, { name: '淄博市', pinyin: 'zibo', province: '山东省' }, { name: '郑州市', pinyin: 'zhengzhou', province: '河南省' }, { name: '重庆市', pinyin: 'chongqing', province: '直辖市' }, { name: '镇江市', pinyin: 'zhenjiang', province: '江苏省' }]
+            }
+        };
+        
+        // 初始化搜索服务
+        AMap.plugin(['AMap.AutoComplete', 'AMap.PlaceSearch', 'AMap.Geocoder', 'AMap.CitySearch'], function() {
+            autoComplete = new AMap.AutoComplete({
+                city: currentSelectedCity
+            });
+            
+            placeSearch = new AMap.PlaceSearch({
+                city: currentSelectedCity,
+                pageSize: 10
+            });
+            
+            geocoder = new AMap.Geocoder({
+                city: currentSelectedCity
+            });
+            
+            // 城市检测
+            var citySearch = new AMap.CitySearch();
+            citySearch.getLocalCity(function(status, result) {
+                if (status === 'complete' && result.info === 'OK') {
+                    detectedCity = result.city;
+                    console.log('检测到城市:', detectedCity);
+                    
+                    // 如果检测到的城市在我们的列表中，显示在"当前定位"
+                    var cityName = detectedCity.replace('市', '') + '市';
+                    if (isCityInList(cityName)) {
+                        document.getElementById('currentCitySection').style.display = 'block';
+                        document.getElementById('currentCityGrid').innerHTML = 
+                            '<div class="city-item" onclick="selectCity(\'' + cityName + '\')">' + cityName + '</div>';
+                    }
+                }
+            });
+        });
+        
+        // 检查城市是否在列表中
+        function isCityInList(cityName) {
+            // 检查热门城市
+            if (cityData.hotCities.some(function(c) { return c.name === cityName; })) {
+                return true;
+            }
+            // 检查所有城市
+            for (var letter in cityData.allCities) {
+                if (cityData.allCities[letter].some(function(c) { return c.name === cityName; })) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        
+        // 打开城市选择器
+        function openCitySelector() {
+            document.getElementById('cityModalOverlay').classList.add('active');
+            document.getElementById('citySearchInput').value = '';
+            renderCities();
+            
+            // 聚焦搜索框
+            setTimeout(function() {
+                document.getElementById('citySearchInput').focus();
+            }, 100);
+        }
+        
+        // 关闭城市选择器
+        function closeCitySelector(event) {
+            if (!event || event.target.id === 'cityModalOverlay') {
+                document.getElementById('cityModalOverlay').classList.remove('active');
+            }
+        }
+        
+        // 渲染城市列表
+        function renderCities() {
+            // 渲染热门城市
+            var hotCitiesHTML = '';
+            cityData.hotCities.forEach(function(city) {
+                var currentClass = city.name === currentSelectedCity ? ' current' : '';
+                hotCitiesHTML += '<div class="city-item' + currentClass + '" onclick="selectCity(\'' + city.name + '\')">' + city.name + '</div>';
+            });
+            document.getElementById('hotCitiesGrid').innerHTML = hotCitiesHTML;
+            
+            // 渲染全部城市（按字母分组）
+            var allCitiesHTML = '';
+            for (var letter in cityData.allCities) {
+                if (cityData.allCities[letter].length > 0) {
+                    allCitiesHTML += '<div class="city-letter-group">';
+                    allCitiesHTML += '<div class="city-letter">' + letter + '</div>';
+                    allCitiesHTML += '<div class="city-grid">';
+                    cityData.allCities[letter].forEach(function(city) {
+                        var currentClass = city.name === currentSelectedCity ? ' current' : '';
+                        allCitiesHTML += '<div class="city-item' + currentClass + '" onclick="selectCity(\'' + city.name + '\')">' + city.name + '</div>';
+                    });
+                    allCitiesHTML += '</div></div>';
+                }
+            }
+            document.getElementById('allCitiesContainer').innerHTML = allCitiesHTML;
+        }
+        
+        // 筛选城市
+        function filterCities() {
+            var keyword = document.getElementById('citySearchInput').value.toLowerCase().trim();
+            
+            if (keyword === '') {
+                renderCities();
+                return;
+            }
+            
+            // 搜索匹配的城市
+            var matchedCities = [];
+            
+            // 搜索热门城市
+            cityData.hotCities.forEach(function(city) {
+                if (city.name.toLowerCase().indexOf(keyword) !== -1 || 
+                    city.pinyin.indexOf(keyword) !== -1) {
+                    matchedCities.push(city);
+                }
+            });
+            
+            // 搜索所有城市
+            for (var letter in cityData.allCities) {
+                cityData.allCities[letter].forEach(function(city) {
+                    if ((city.name.toLowerCase().indexOf(keyword) !== -1 || 
+                         city.pinyin.indexOf(keyword) !== -1) &&
+                        !matchedCities.some(function(c) { return c.name === city.name; })) {
+                        matchedCities.push(city);
+                    }
+                });
+            }
+            
+            // 显示搜索结果
+            if (matchedCities.length > 0) {
+                var resultHTML = '<div class="city-grid">';
+                matchedCities.forEach(function(city) {
+                    var currentClass = city.name === currentSelectedCity ? ' current' : '';
+                    resultHTML += '<div class="city-item' + currentClass + '" onclick="selectCity(\'' + city.name + '\')">' + 
+                        city.name + '<br><span style="font-size: 11px; color: #999;">' + city.province + '</span></div>';
+                });
+                resultHTML += '</div>';
+                
+                document.getElementById('hotCitiesGrid').parentElement.style.display = 'none';
+                document.getElementById('allCitiesSection').innerHTML = 
+                    '<div class="city-section-title">🔍 搜索结果 (' + matchedCities.length + ')</div>' + resultHTML;
+            } else {
+                document.getElementById('allCitiesSection').innerHTML = 
+                    '<div style="text-align: center; padding: 40px; color: #999;">未找到匹配的城市</div>';
+            }
+        }
+        
+        // 选择城市
+        function selectCity(cityName) {
+            currentSelectedCity = cityName;
+            document.getElementById('cityInput').value = cityName;
+            closeCitySelector();
+            
+            // 更新地点搜索的城市限制
+            if (autoComplete) {
+                autoComplete.setCity(cityName);
+            }
+            if (placeSearch) {
+                placeSearch.setCity(cityName);
+            }
+            if (geocoder) {
+                geocoder.setCity(cityName);
+            }
+            
+            // 清空地点搜索
+            document.getElementById('locationSearch').value = '';
+            document.getElementById('searchSuggestions').classList.remove('active');
+            
+            // 移除搜索标记
+            if (searchMarker) {
+                searchMarker.setMap(null);
+                searchMarker = null;
+            }
+            
+            // 显示所有标记和聚合
+            if (cluster) {
+                cluster.setMap(map);
+            }
+            markers.forEach(function(marker) {
+                marker.show();
+            });
+            
+            // 移动到选中的城市
+            var cityCenter = getCityCenter(cityName);
+            map.setZoomAndCenter(12, cityCenter, true);
+            displayDistances(cityCenter);
+        }
+
+// 定义位置：医院列表
+        var locations = [
+            //上海市
+            {name:'奉贤区金钱公路4999私人诊所',coords:[121.551003,30.875373],address:'上海市奉贤区金钱公路4999号'},
+
+            //上饶市
+            {name:'上饶市陈医生诊所',coords:[117.671295,28.598446],address:'江西省上饶市横峰县沿河路横峰县葛源镇人民政府东50米(沿河路西)'},
+            {name:'上饶市葛源中心卫生院',coords:[117.669967,28.598099],address:'江西省上饶市横峰县葛源镇葛源村洪城大道054号'},
+            {name:'上饶市龚桂年诊所',coords:[117.917024,28.428359],address:'江西省上饶市广信区旭日街道水木清华园9幢112'},
+            {name:'上饶市广丰区广丰区中医院',coords:[118.194355,28.459012],address:'江西省上饶市广丰区'},
+            {name:'上饶市广丰区交溪村诊所',coords:[118.180352,28.342172],address:'江西省上饶市广丰区交溪村'},
+            {name:'上饶市广丰区人民医院',coords:[118.17898,28.42563],address:'江西省上饶市广丰区考场路37号(近卧龙城)'},
+            {name:'上饶市广丰区中医院',coords:[118.187944,28.452716],address:'江西省上饶市广丰区铜钹山大道与桑园北路交汇处'},
+            {name:'上饶市广信区上泸镇振兴街132号卫生院',coords:[117.956676,28.224306],address:'江西省上饶市广信区上泸镇振兴街132号'},
+            {name:'上饶市枧底镇卫生院',coords:[118.117183,28.321703],address:'江西省上饶市广丰区府前街'},
+            {name:'上饶市鄱阳县高家岭车廊卫生所',coords:[116.74258,29.166417],address:'江西省上饶市鄱阳县高家岭车廊'},
+            {name:'上饶市人民医院',coords:[117.97705,28.43858],address:'江西省上饶市信州区书院路86号'},
+            {name:'上饶市双明镇中心卫生院',coords:[118.277446,28.794029],address:'江西省上饶市玉山县玉紫线与端明路交叉口正南方向350米左右'},
+            {name:'上饶市信州区纪水仙西医内科诊所',coords:[117.991207,28.429398],address:'江西省上饶市信州区'},
+            {name:'上饶市信州区上饶市车头村卫生室',coords:[117.998368,28.427583],address:'江西省上饶市信州区车头村'},
+            {name:'上饶市于都县贡江镇古田村卫生所',coords:[115.428255,25.969206],address:'江西省赣州市于都县贡江镇站前南路与古田中路交叉路口西侧(福熙城东北侧约50米)'},
+            {name:'上饶市余干东街与上观路张振邦卫生室',coords:[116.845081,29.732694],address:'江西省上饶市余干县东街与上观路'},
+            {name:'上饶市余干县白马桥乡江涛诊所',coords:[115.971692,29.727846],address:'江西省上饶市余干县白马桥乡'},
+            {name:'上饶市余干县白马桥乡王源村古唐卫生室',coords:[116.760277,28.58548],address:'江西省上饶市余干县白马桥乡王源村'},
+            {name:'上饶市余干县洪家嘴乡卫生院',coords:[116.669835,28.701938],address:'江西省上饶市余干县洪家嘴乡'},
+            {name:'上饶市余干县人民医院',coords:[116.689448,28.698664],address:'江西省上饶市余干县世纪大道297号'},
+            {name:'上饶市余干县石门村卫生服务室谭海文医生',coords:[116.685131,28.585478],address:'江西省上饶市余干县石门村'},
+            {name:'上饶市玉山县冰溪镇卫生院',coords:[118.264297,28.681422],address:'江西省上饶市玉山县冰溪镇'},
+            {name:'上饶市玉山县怀玉乡中心卫生院',coords:[116.071444,29.654215],address:'江西省上饶市玉山县怀玉乡'},
+            {name:'上饶市玉山县怀玉乡中心卫生院',coords:[118.001395,28.81287],address:'江西省上饶市玉山县怀玉乡X659怀玉派出所东侧隔壁'},
+            {name:'上饶市玉山县怀玉乡中心卫生院',coords:[118.001395,28.81287],address:'江西省上饶市玉山县怀玉乡X659怀玉派出所东侧隔壁'},
+            {name:'上饶市玉山县黄家驷医院(玉山县人民医院)',coords:[118.25933,28.698361],address:'江西省上饶市玉山县怀玉山大道东路9号'},
+            {name:'上饶市玉山县临湖镇卫生院',coords:[117.954503,28.659141],address:'江西省上饶市玉山县临湖镇'},
+            {name:'上饶市玉山县双明镇老街张传海诊所',coords:[116.348936,29.739742],address:'江西省上饶市玉山县双明镇老街'},
+            {name:'上饶市玉山县双明镇桥村私人诊所',coords:[118.190456,28.633796],address:'江西省上饶市玉山县双明镇桥村'},
+            {name:'上饶市玉山县双明镇阳明路中心卫生院',coords:[118.285215,28.803729],address:'江西省上饶市玉山县双明镇阳明路'},
+            {name:'上饶市玉山县文成街道卫生院',coords:[118.197883,28.647457],address:'江西省上饶市玉山县文成街道鸿山路'},
+
+            //东莞市
+            {name:'东莞市东莞清溪振民第二诊所(鹿湖商业中心)',coords:[114.175108,22.840663],address:'广东省东莞市清溪镇鹿湖商业中心'},
+
+            //东营市
+            {name:'东营市东营区东营市人民医院',coords:[118.588463,37.454847],address:'山东省东营市东营区'},
+            {name:'东营市东营区牛庄镇卫生院',coords:[118.46961,37.345239],address:'山东省东营市东营区牛庄镇'},
+            {name:'东营市垦利区郝家镇宋沙村卫生服务站',coords:[118.581432,37.454847],address:'山东省东营市垦利区郝家镇宋沙村'},
+
+            //丰城市
+            {name:'丰城市东方红大街136号丰城市中医院',coords:[115.798108,28.204349],address:'江西省丰城市东方红大街136号'},
+            {name:'丰城市涂雪花卫生室',coords:[115.80655,28.165513],address:'江西省丰城市'},
+            {name:'丰城市拖船中心卫生院',coords:[115.670766,28.15344],address:'江西省丰城市拖船镇'},
+
+            //临沂市
+            {name:'临沂市经开区佃玉综合门诊部（毛屯诊所）',coords:[118.439736,35.048406],address:'山东省临沂市经开区毛屯'},
+
+            //乌鲁木齐市
+            {name:'乌鲁木齐市凤凰妇产医院',coords:[87.579393,43.828178],address:'新疆维吾尔自治区乌鲁木齐市沙依巴克区西北路132号'},
+            {name:'乌鲁木齐市新疆维吾尔自治区人民医院',coords:[87.614524,43.784047],address:'新疆维吾尔自治区乌鲁木齐市天山区天池路91号'},
+            {name:'乌鲁木齐市新疆医科大学第一附属医院',coords:[87.582424,43.838302],address:'新疆维吾尔自治区乌鲁木齐市新市区鲤鱼山南路137号'},
+
+            //九江市
+            {name:'九江市兰医生诊所',coords:[115.106085,29.261147],address:'江西省九江市武宁县豫宁街道外贸宾馆后面'},
+            {name:'九江市庐山市和公塘村委会燕妮健康诊所',coords:[115.980863,29.306313],address:'江西省九江市庐山市和公塘村'},
+            {name:'九江市庐山市南阳畈村委会杏林驿站旁诊所',coords:[115.980863,29.308132],address:'江西省九江市庐山市南阳畈村'},
+            {name:'九江市太阳升镇刘世海诊所',coords:[114.690415,29.169737],address:'江西省九江市修水县太阳升镇菜市场后面'},
+            {name:'九江市涂开贵医师诊所',coords:[114.581292,29.028864],address:'江西省九江市修水县罗桥路9-33号'},
+            {name:'九江市武宁县人民医院',coords:[115.115948,29.242937],address:'江西省九江市武宁县豫宁大道373东北方向60米'},
+            {name:'九江市修水县第一人民医院南院',coords:[114.529568,29.000096],address:'江西省九江市修水县第一人民医院'},
+            {name:'九江市修水县上杭乡卫生院',coords:[114.460263,29.112008],address:'江西省九江市修水县上杭乡'},
+            {name:'九江市修水县修水县福湾村卫生所',coords:[114.531908,29.003098],address:'江西省九江市修水县福湾村'},
+            {name:'九江市浔阳区龙开河社区卫生服务站',coords:[115.985282,29.727474],address:'江西省九江市浔阳区龙开河社区'},
+            {name:'九江市永修县人民医院',coords:[115.836267,29.017359],address:'江西省九江市永修县水厂东路与永泰路交叉口西南方向204米左右'},
+
+            //五家渠市
+            {name:'五家渠市第六师五家渠市总医院',coords:[87.562417,44.193087],address:'新疆维吾尔自治区五家渠市纬十八路与经十五路交叉口西南方向249米左右'},
+
+            //南宁市
+            {name:'南宁市隆安县都结乡中心卫生院',coords:[107.476866,23.188109],address:'广西壮族自治区南宁市隆安县X506号(隆天路)'},
+            {name:'南宁市西乡塘区桃花源社区卫生服务站',coords:[108.316469,22.88118],address:'广西省南宁市西乡塘区'},
+
+            //南昌市
+            {name:'南昌市高新区昌东大道鱼尾村卫生室',coords:[116.020745,28.721593],address:'江西省南昌市高新区昌东大道鱼尾村'},
+            {name:'南昌市进贤县南湾村卫生健康服务室',coords:[116.132345,28.293671],address:'江西省南昌市进贤县南湾村'},
+            {name:'南昌市进贤县温圳镇章新华中医诊所',coords:[116.279336,28.373203],address:'江西省南昌市进贤县温圳镇'},
+            {name:'南昌市进贤县温圳镇中心卫生院发热门诊',coords:[116.091076,28.344573],address:'江西省南昌市进贤县温圳镇'},
+            {name:'南昌市进贤县文港镇卫生院',coords:[116.121336,28.289126],address:'江西省南昌市进贤县文港镇'},
+            {name:'南昌市南昌县奥林匹克花园诊所',coords:[115.891,28.600058],address:'江西省南昌市南昌县奥林匹克花园'},
+            {name:'南昌市南昌县邓埠西路李丽君诊所',coords:[115.893032,28.590729],address:'江西省南昌市南昌县邓埠西路'},
+            {name:'南昌市南昌县金沙二路存德诊所',coords:[115.886825,28.589636],address:'江西省南昌市南昌县金沙二路'},
+            {name:'南昌市南昌县莲塘镇樊哲保诊所',coords:[115.891,28.600058],address:'江西省南昌市南昌县莲塘镇'},
+            {name:'南昌市青山湖区创新一路南塘村卫生所',coords:[115.998094,28.675277],address:'江西省南昌市青山湖区创新一路南塘村'},
+            {name:'南昌市青山湖区罗家镇濡溪村三联路口诊所',coords:[116.023137,28.662072],address:'江西省南昌市青山湖区罗家镇濡溪村三联路口'},
+            {name:'南昌市新建区经开汇泉诊所(皇姑路店)',coords:[115.870865,28.759236],address:'江西省南昌市新建区经开皇姑路'},
+            {name:'南昌市新建区经开区左华诊所',coords:[115.847433,28.740055],address:'江西省南昌市新建区经开区'},
+            {name:'南昌市新建区双港楼立新诊所',coords:[115.865367,28.748556],address:'江西省南昌市新建区双港'},
+            {name:'南昌市江西氨厂职工医院',coords:[116.023107,28.705448],address:'江西省南昌市南昌县创新大道'},
+            {name:'南昌市罗家镇三联路口潘溪卫生所',coords:[116.004662,28.659841],address:'江西省南昌市青山湖区罗家镇八达驾校(总校)北侧60米'},
+            {name:'南昌市南昌明州康复医院',coords:[115.949917,28.689515],address:'江西省南昌市青山湖区高新技术产业开发区高新一路181号'},
+            {name:'南昌市南塘村卫生所',coords:[115.967227,28.679653],address:'江西省南昌市青山湖区京东镇京东大道广天宾馆'},
+            {name:'南昌市南湾村卫生健康服务室',coords:[116.126038,28.287674],address:'江西省南昌市进贤县文港镇燕归北路文港镇'},
+            {name:'南昌市文港镇卫生院',coords:[116.114897,28.28318],address:'江西省南昌市进贤县文港镇花园路'},
+            {name:'南昌市系马桩街道南海行宫社区卫生服务站',coords:[115.896601,28.669833],address:'江西省南昌市西湖区干家前街南昌市松柏小学(干家巷校区)对面'},
+            {name:'南昌市新建区人民医院',coords:[115.826577,28.679007],address:'江西省南昌市新建区长堎镇长征西路38号'},
+            {name:'南昌市邹修斌诊所',coords:[115.879574,28.591801],address:'南昌市南昌县力高国际城-北1门'},
+
+            //厦门市
+            {name:'厦门市同安区新民镇卫生院',coords:[118.131472,24.711866],address:'福建省厦门市同安区新民大道1316号'},
+
+            //合肥市
+            {name:'合肥市安徽医科大学第二附属医院',coords:[117.212314,31.790378],address:'安徽省合肥市蜀山区芙蓉路678号'},
+            {name:'合肥市肥西县紫蓬镇卫生院',coords:[117.025491,31.751274],address:'安徽省合肥市肥西县紫蓬镇紫蓬路'},
+            {name:'合肥市孙氏堂中医(综合)诊所',coords:[117.166856,31.74112],address:'安徽省合肥市肥西县上派镇翡翠蓝湾(朗园)S-2栋商铺102室中医疑难杂症专科'},
+
+            //吉安市
+            {name:'吉安市安福县寮塘乡卫生院',coords:[114.597918,27.268891],address:'江西省吉安市安福县寮塘乡寮塘路'},
+            {name:'吉安市永新县319永新国道边仰山村委白门斗组(?)',coords:[114.024129,27.049957],address:'江西省吉安市永新县319国道边仰山村'},
+            {name:'吉安市永新县商贸城社区卫生中心',coords:[116.380707,29.946464],address:'江西省吉安市永新县商贸城'},
+            {name:'吉安市永新县湘赣大道红卫桥卫生诊所',coords:[115.971692,29.727846],address:'江西省吉安市永新县湘赣大道红卫桥'},
+
+            //哈密市
+            {name:'哈密市新疆医科大学附属哈密市中心医院',coords:[93.520996,42.830462],address:'新疆维吾尔自治区哈密市伊州区广场北路11号'},
+
+            //唐山市
+            {name:'唐山市丰南区运河东路东湖诊所',coords:[118.088869,39.567739],address:'河北省唐山市丰南区运河东路'},
+            {name:'唐山市路北区华北理工大学附属医院',coords:[118.184627,39.646593],address:'河北省唐山市路北区'},
+            {name:'唐山市遵化市北营村小芹诊所',coords:[117.856925,40.107668],address:'河北省唐山市遵化市北营村'},
+
+            //塔城市
+            {name:'塔城市人民医院',coords:[82.992735,46.747808],address:'新疆维吾尔自治区塔城地区塔城市团结路9号'},
+
+            //天津市
+            {name:'天津市宝坻区人民医院',coords:[117.307704,39.718903],address:'天津市宝坻区广川路8号'},
+            {name:'天津市天津和平北有内科诊所',coords:[117.181568,39.102849],address:'天津市和平区吴家窑四号路与同安道交口,代谢病医院斜对面'},
+
+            //宁德市
+            {name:'宁德市福安市溪潭镇凤林村卫生所',coords:[119.638888,27.028417],address:'福建省宁德市福安市溪潭镇凤林村'},
+
+            //宜春市
+            {name:'宜春市丰城市涂雪花卫生室',coords:[115.80061,28.159617],address:'江西省宜春市丰城市龙光东大道468号'},
+            {name:'宜春市丰城市中医院',coords:[115.791269,28.197159],address:'江西省宜春市丰城市东方红大街136号'},
+            {name:'宜春市奉新县赤岸镇卫生院',coords:[115.380557,28.697357],address:'江西省宜春市奉新县赤岸镇'},
+            {name:'宜春市奉新县人民医院',coords:[115.394923,28.706141],address:'江西省宜春市奉新县狮山东大道179号'},
+            {name:'宜春市万载县人民医院',coords:[116.340455,29.736565],address:'江西省宜春市万载县'},
+            {name:'宜春市万载阳乐大道邓展胜诊所',coords:[114.457251,28.115994],address:'江西省宜春市万载县阳乐大道'},
+            {name:'宜春市袁州区昌黎综合门诊部',coords:[114.361864,27.799013],address:'江西省宜春市袁州区中山西路凤林花苑小区北侧约40米'},
+            {name:'宜春市浙赣友好医院',coords:[114.381028,27.787342],address:'江西省宜春市袁州区平安路290号'},
+
+            //宿州市
+            {name:'宿州市立医院',coords:[116.983076,33.630342],address:'安徽省宿州市埇桥区汴河中路299号'},
+
+            //巴彦淖尔市
+            {name:'巴彦淖尔市临河区袁荣西医诊所',coords:[107.409235,40.775456],address:'内蒙古自治区巴彦淖尔市临河区北环路办事处北环路'},
+
+            //巴音郭楞蒙古自治州
+            {name:'新疆巴音郭楞蒙古自治州巴州人民医院',coords:[86.150024,41.760954],address:'新疆维吾尔自治区巴音郭楞蒙古自治州库尔勒市人民东路41号'},
+            {name:'新疆巴音郭楞蒙古自治州第六师奇台医院',coords:[89.579896,44.024315],address:'新疆维吾尔自治区昌吉回族自治州奇台县解放西街540号'},
+
+            //常州市
+            {name:'常州市钟楼区新闸街道社区卫生服务中心',coords:[119.913412,31.83565],address:'江苏省常州市钟楼区新闸街道'},
+
+            //平凉市
+            {name:'平凉市甘肃医学院附属医院',coords:[106.706837,35.534559],address:'甘肃省平凉市崆峒区崆峒大道296号'},
+            {name:'平凉市吴坡村卫生所',coords:[106.696118,35.483377],address:'甘肃省平凉市崆峒区峡门乡吴坡小学西南300米'},
+
+            //成都市
+            {name:'成都市保济堂诊所(郫都万达店)',coords:[103.910147,30.80591],address:'四川省成都市郫都区凉水井街与蜀都壹街交叉口正东方向118米左右'},
+            {name:'成都市成华世港堂诊所(中房红枫岭二期店)',coords:[104.125939,30.673361],address:'四川省成都市成华区跳蹬河街道枫林路125号1层'},
+            {name:'成都市成华四和诊所',coords:[104.153338,30.632083],address:'四川省成都市成华区和美西路8号'},
+            {name:'成都市地矿人家',coords:[103.893229,30.815532],address:'四川省成都市郫都区郫筒街道成灌西路45号（任医生）'},
+            {name:'成都市都江堰旭康诊所',coords:[103.574187,30.847042],address:'四川省成都市都江堰市青城山镇道观路高山流水北侧约260米'},
+            {name:'成都市汇心诊所',coords:[104.056741,30.723593],address:'四川省成都市金牛区沙河源街道洞子口路121号附12,13号天悦城'},
+            {name:'成都市郫都一里诊所',coords:[103.898361,30.804597],address:'四川省成都市郫都区郫筒街道舜苑·一里阳光4号门西北60米'},
+            {name:'成都市双流辉霖诊所',coords:[103.927088,30.57007],address:'四川省成都市双流区东升街道三强西路122(东升地铁站A口步行180米)'},
+            {name:'成都市双流区东升社区卫生服务中心',coords:[103.924611,30.570348],address:'四川省成都市双流区东升街道藏卫路中段全友家私东南45米'},
+            {name:'成都市武侯罗兰诊所',coords:[104.064293,30.635045],address:'四川省成都市武侯区金陵横路59号（18|08298o92刘老师）'},
+            {name:'成都市圆心大药房(华西店)',coords:[104.059949,30.644225],address:'四川省成都市武侯区黉门后街9号附4、5号（028 855o88o7）'},
+            {name:'成都市中一堂大药房(中医附院店)',coords:[104.04281,30.665312],address:'四川省成都市金牛区西安路街道十二桥路37号2栋附8号A座2楼'},
+
+            //抚州市
+            {name:'抚州市崇仁县河上镇河上村卫生健康服务室',coords:[116.014285,27.863724],address:'江西省抚州市崇仁县河上镇河上村'},
+            {name:'抚州市崇仁县相山镇医院',coords:[116.041769,27.557685],address:'江西省抚州市崇仁县相山镇'},
+            {name:'抚州市金溪县琅琚中心卫生院门诊',coords:[116.657027,27.875209],address:'江西省抚州市金溪县琅琚镇'},
+            {name:'抚州市临川区笠上村卫生室',coords:[116.325895,27.938727],address:'江西省抚州市临川区笠上村'},
+            {name:'抚州市胡福泉诊所',coords:[116.271147,28.11454],address:'江西省抚州市临川区074县道与罗长线交叉口南360米'},
+            {name:'抚州市杨林社区卫生服务站',coords:[116.302213,27.942177],address:'江西省抚州市临川区上顿渡镇饶博新村3号公寓楼西南门旁'},
+            {name:'抚州市圳口乡卫生院',coords:[116.349718,27.398266],address:'江西省抚州市宜黄县S213'},
+
+            //新余市
+            {name:'新余市分宜县人民医院',coords:[114.680005,27.809928],address:'江西省新余市分宜县昌山南路392号'},
+            {name:'新余市渝水区青年路何医师中医诊所',coords:[114.923535,27.823579],address:'江西省新余市渝水区青年路'},
+            {name:'新余市渝水区青年路燕子山陈医生诊所',coords:[114.921046,27.818807],address:'江西省新余市渝水区青年路燕子山'},
+            {name:'新余市渝水区仙来西大道刘杏芳中医诊所',coords:[114.904191,27.821848],address:'江西省新余市渝水区仙来西大道'},
+            {name:'新余市钟祖鑫中医诊所',coords:[114.679833,27.813487],address:'江西省新余市分宜县分宜镇昌山南路心怡花园小区底商'},
+
+            //无锡市
+            {name:'无锡市惠山区钱桥街道社区卫生服务中心',coords:[120.230856,31.599601],address:'江苏省无锡市惠山区钱桥大街20号'},
+            {name:'无锡市惠山区徐红江诊所',coords:[120.358269,31.68205],address:'江苏省无锡市惠山区'},
+            {name:'无锡市江南大学附属医院',coords:[120.289779,31.597119],address:'江苏省无锡市梁溪区兴源北路'},
+            {name:'无锡市锡山区王正荣诊所',coords:[120.353103,31.596917],address:'江苏省无锡市锡山区'},
+
+            //昌吉回族自治州
+            {name:'新疆昌吉回族自治州伊犁州友谊医院新区儿外科',coords:[81.263434,43.94172],address:'新疆维吾尔自治区伊犁哈萨克自治州伊宁市重庆路58号'},
+
+            //昌吉市
+            {name:'昌吉市昌吉回族自治州人民医院',coords:[87.307529,44.021176],address:'新疆维吾尔自治区昌吉回族自治州昌吉市延安北路办事处延安北路303号'},
+            {name:'昌吉市新湖农场医院',coords:[86.47003,44.573559],address:'新疆维吾尔自治区昌吉回族自治州玛纳斯县迎宾北路北端'},
+
+            //景德镇市
+            {name:'景德镇市昌江区余端茂卫生室',coords:[117.206896,29.285737],address:'江西省景德镇市昌江区'},
+            {name:'景德镇市第三人民医院',coords:[117.253096,29.305188],address:'江西省景德镇市'},
+            {name:'景德镇市洪源镇中心卫生院',coords:[117.153357,29.317806],address:'江西省景德镇市浮梁县洪源镇洪卫路'},
+
+            //杭州市
+            {name:'杭州市钱塘区宋都晨光国际小区门口（电话178l6o48352）',coords:[120.385664,30.290726],address:'浙江省杭州市钱塘区宋都晨光国际小区'},
+            {name:'杭州市上城区浙江省中医院湖滨院区急诊',coords:[120.172308,30.258239],address:'浙江省杭州市上城区'},
+            {name:'杭州市西湖区转塘街道社区卫生服务中心(新院区)',coords:[120.080457,30.160766],address:'浙江省杭州市西湖区转塘街道'},
+
+            //株洲市
+            {name:'株洲市荷塘王成立诊所',coords:[113.163282,27.834939],address:'湖南省株洲市荷塘区合泰金街华庭13号'},
+            {name:'株洲市荷塘长茂诊所',coords:[113.167093,27.831976],address:'湖南省株洲市荷塘区东湖路50正北方向40米裕丰广场三区3栋'},
+            {name:'株洲市中心医院',coords:[113.142652,27.812003],address:'湖南省株洲市天元区长江南路116号'},
+            {name:'株洲市株洲田心医院急诊科',coords:[113.131135,27.880896],address:'湖南省株洲市石峰区田心街道株洲市中心医院田心院区'},
+
+            //梅州市
+            {name:'梅州市五华县河东卫生院公共卫生服务区',coords:[115.792651,23.926312],address:'广东省梅州市五华县河东镇'},
+            {name:'梅州市五华县五华县河东镇卫生院',coords:[115.789414,23.925377],address:'广东省梅州市五华县河东镇'},
+
+            //梧州市
+            {name:'梧州市长洲区红岭社区卫生服务中心',coords:[111.249955,23.488776],address:'广西壮族自治区梧州市长洲区兴龙路36号'},
+
+            //武汉市
+            {name:'武汉市同济医院',coords:[114.332,30.577],address:'湖北省武汉市解放大道1095号'},
+            {name:'武汉市协和医院',coords:[114.295,30.575],address:'湖北省武汉市解放大道1277号'},
+
+            //沧州市
+            {name:'沧州市海兴县医院',coords:[117.498155,38.157041],address:'河北省沧州市海兴县海兴县行政审批局东北200米(海中路南)'},
+            {name:'沧州市人民医院',coords:[116.864421,38.315255],address:'河北省沧州市新华区清池北大道7号'},
+            {name:'沧州市中心医院',coords:[116.846214,38.312185],address:'河北省沧州市运河区新华西路16号'},
+
+            //济南市
+            {name:'济南市莱芜区济南市人民医院(南院区)',coords:[117.673952,36.244514],address:'山东省济南市莱芜区'},
+            {name:'济南市莱芜区汶水社区卫生服务中心',coords:[117.689018,36.207896],address:'山东省济南市莱芜区'},
+            {name:'济南市市中区市中如意诊所(宏瑞国际星城北区店)',coords:[116.96165,36.631178],address:'山东省济南市市中区'},
+
+            //淄博市
+            {name:'淄博市张店区小庄社区小区内诊所',coords:[118.049615,36.85915],address:'山东省淄博市张店区小庄社区'},
+
+            //淮安市
+            {name:'淮安市第二人民医院',coords:[119.029299,33.586717],address:'江苏省淮安市清江浦区淮海南路62号'},
+            {name:'淮安市金湖县福成诊所',coords:[119.006892,33.024482],address:'江苏省淮安市金湖县'},
+            {name:'淮安市清江浦区杏林居中医综合诊所',coords:[119.032273,33.566655],address:'江苏省淮安市清江浦区'},
+
+            //深圳市
+            {name:'深圳市宝安人民医院',coords:[113.914503,22.561882],address:'广东省深圳市宝安区宝城龙井二路118号'},
+            {name:'深圳市宝田医院',coords:[113.875838,22.782866],address:'广东省深圳市光明区福庄路2号'},
+            {name:'深圳市第四人民医院(深圳市萨米医疗中心)',coords:[114.377794,22.705037],address:'广东省深圳市坪山区石井街道金牛西路1号'},
+            {name:'深圳市龙岗区第三人民医院急诊',coords:[114.213255,22.648625],address:'广东省深圳市龙岗区横岗街道松柏路横岗人民医院(横岗地铁站B口步行230米)'},
+            {name:'深圳市龙岗区第四人民医院',coords:[114.145675,22.609467],address:'广东省深圳市龙岗区南湾街道金健路2号'},
+            {name:'深圳市龙岗中心医院建新社区健康服务中心',coords:[114.272614,22.723463],address:'广东省深圳市龙岗区建新路31号'},
+            {name:'深圳市龙华元芬诊所',coords:[114.005644,22.651055],address:'广东省深圳市龙华区龙华路6号'},
+            {name:'深圳市楼村社康中心',coords:[113.932288,22.789094],address:'广东省深圳市光明区楼二工四路36号4栋'},
+            {name:'深圳市罗帝舜诊所',coords:[114.27226,22.733882],address:'广东省深圳市龙岗区龙岗街道福宁路52号福宁路62号3号铺'},
+            {name:'深圳市梅陇镇社区健康服务中心',coords:[114.031651,22.629987],address:'广东省深圳市龙华区民治街道梅陇镇8栋外围1楼'},
+            {name:'深圳市坪山区妇幼保健院',coords:[114.369213,22.746254],address:'广东省深圳市坪山区龙田街道龙田南路6号'},
+            {name:'深圳市坪山区人民坑梓社区健康服务站医院坑梓社区健康服务中心',coords:[114.386081,22.747806],address:'广东省深圳市坪山区坑梓人民路163号'},
+            {name:'深圳市瑞博尔门诊部',coords:[113.959913,22.571018],address:'广东省深圳市南山区珠光路260号(华润万家正对面)'},
+            {name:'深圳市深圳大学总医院',coords:[113.987425,22.594185],address:'广东省深圳市南山区学苑大道1298号'},
+            {name:'深圳市深圳罗惠姿诊所',coords:[114.272336,22.733833],address:'广东省深圳市龙岗区福宁路福宁小区北侧'},
+            {name:'深圳市松如诊所',coords:[114.044175,22.637735],address:'广东省-深圳市-龙华区-工业路油松综合市场a19栋'},
+            {name:'深圳市同乐诊所',coords:[114.309228,22.708793],address:'广东省深圳市龙岗区大坑路汇丰楼东南侧约40米'},
+            {name:'深圳市王丽洪诊所',coords:[114.284312,22.733133],address:'广东省深圳市龙岗区龙岗街道向东路91号'},
+            {name:'深圳市新围祥泰诊所',coords:[113.952879,22.58147],address:'广东省深圳市南山区366大街2栋101室'},
+            {name:'深圳市芸晨诊所',coords:[114.023854,22.636287],address:'广东省深圳市龙华区和悦路29号'},
+            {name:'深圳市张远强诊所',coords:[113.842579,22.736244],address:'广东省深圳市宝安区新桥街道洋下二路15号'},
+
+            //温州市
+            {name:'温州市仰义街道社区卫生服务中心',coords:[120.587791,28.060655],address:'浙江省温州市鹿城区仰义街道洞桥口1号'},
+
+            //湖州市
+            {name:'湖州市吴兴区王华西医内科诊所',coords:[120.133526,30.884995],address:'浙江省湖州市吴兴区'},
+            {name:'湖州市长兴县滨海水木花都',coords:[119.887474,31.008549],address:'浙江省湖州市长兴县滨海水木花都'},
+
+            //盐城市
+            {name:'盐城市东台市五烈镇广山村卫生室',coords:[120.176999,32.800147],address:'江苏省盐城市东台市五烈镇广山村'},
+
+            //石河子市
+            {name:'石河子市石河子大学医学院第一附属医院',coords:[86.05993,44.298121],address:'新疆维吾尔自治区石河子市北二路107号'},
+
+            //福州市
+            {name:'福州市洋下村卫生所',coords:[119.556669,25.862381],address:'福建省-福州市-长乐区-古槐镇洋下村沟乾77号'},
+
+            //菏泽市
+            {name:'菏泽市河山烟酒超市左侧诊所',coords:[115.125786,35.295306],address:'山东省菏泽市东明县城关街道三八路石化小区'},
+            {name:'菏泽市牡丹区菏泽市中医医院',coords:[115.377446,35.280741],address:'山东省菏泽市牡丹区'},
+            {name:'菏泽市牡丹区毛胡同卫生室',coords:[115.490529,35.273658],address:'山东省菏泽市牡丹区毛胡同'},
+            {name:'菏泽市牡丹区山东省立医院(菏泽医院)-门诊楼',coords:[115.311599,35.135594],address:'山东省菏泽市牡丹区'},
+
+            //萍乡市
+            {name:'萍乡市安源区安源镇卫生院',coords:[113.89119,27.612579],address:'江西省萍乡市安源区安源镇'},
+            {name:'萍乡市安源区萍乡汉和医院',coords:[113.873339,27.638729],address:'江西省萍乡市安源区'},
+            {name:'萍乡市莲花县神泉中心卫生院-预防接种门诊',coords:[113.919137,27.054518],address:'江西省萍乡市莲花县神泉镇'},
+            {name:'萍乡市萍乡赣西医院',coords:[113.74091,27.631019],address:'江西省萍乡市湘东区钢城路22号'},
+            {name:'萍乡市萍乡赣西医院',coords:[113.74091,27.631019],address:'江西省萍乡市湘东区钢城路22号'},
+            {name:'萍乡市萍乡汉和医院',coords:[113.866742,27.63232],address:'江西省萍乡市安源区青萍路西100米'},
+            {name:'萍乡市上栗县荆坪村荷花池旁李医生',coords:[113.924987,27.947665],address:'江西省萍乡市上栗县荆坪村荷花池旁'},
+            {name:'萍乡市湘东区人民医院',coords:[113.724839,27.64191],address:'江西省萍乡市湘东区昌盛大道湘东区人民医院'},
+            {name:'萍乡市湘东区湘东镇赣西医院急诊科',coords:[113.747308,27.637247],address:'江西省萍乡市湘东区湘东镇'},
+
+            //西宁市
+            {name:'西宁市城北区宁张路109号西宁北康医院',coords:[101.762601,36.685418],address:'青海省西宁市城北区宁张路109号'},
+            {name:'西宁市城西民康医院',coords:[101.753534,36.646919],address:'青海省西宁市城西区'},
+            {name:'西宁市青海省妇女儿童医院',coords:[101.800431,36.612627],address:'青海省西宁市城东区共和南路7号'},
+            {name:'西宁市青海省人民医院',coords:[101.803583,36.619928],address:'青海省西宁市城东区共和路2号'},
+            {name:'西宁市西宁北康医院',coords:[101.755849,36.679316],address:'青海省西宁市城北区宁张路109号'},
+
+            //赣州市
+            {name:'赣州市崇义县中山医院',coords:[114.315805,25.699118],address:'江西省赣州市崇义县'},
+            {name:'赣州市宁都县东山坝卫生所',coords:[116.068158,26.742502],address:'江西省赣州市宁都县东山坝'},
+            {name:'赣州市瑞金市沙洲坝卫生院',coords:[116.010842,25.885378],address:'江西省赣州市瑞金市沙洲坝镇'},
+            {name:'赣州市信丰县虎山乡龙州村卫生院',coords:[115.077669,25.115384],address:'江西省赣州市信丰县虎山乡龙州村'},
+            {name:'赣州市兴国县均村乡东方村卫生健康服务室',coords:[115.095729,26.409973],address:'江西省赣州市兴国县均村乡东方村'},
+            {name:'赣州市兴国县潋江镇澄塘卫生所',coords:[115.372212,26.355645],address:'江西省赣州市兴国县潋江镇澄塘'},
+            {name:'赣州市寻乌县水源乡卫生院',coords:[115.648545,25.130032],address:'江西省赣州市寻乌县水源乡'},
+            {name:'赣州市于都县贡江镇古田村卫生所',coords:[115.432215,25.977863],address:'江西省赣州市于都县贡江镇古田村'},
+            {name:'赣州市于都县古田中路古田诊所',coords:[115.434068,25.960068],address:'江西省赣州市于都县古田中路'},
+            {name:'赣州市于都县于都人民医院',coords:[115.411131,25.933265],address:'江西省赣州市于都县'},
+            {name:'赣州市章贡区腊长村诊所',coords:[114.949266,25.821843],address:'江西省赣州市章贡区腊长村'},
+            {name:'赣州市章贡区绿谷门诊口腔科',coords:[114.952964,25.860498],address:'江西省赣州市章贡区'},
+            {name:'赣州市章贡区沙河镇站东诊所',coords:[114.947309,25.824284],address:'江西省赣州市章贡区沙河镇'},
+            {name:'赣州市章贡区沙石镇吉埠新村社区卫生服务站',coords:[114.963989,25.81213],address:'江西省赣州市章贡区沙石镇吉埠新村'},
+            {name:'赣州市章贡区涂发鑫诊所',coords:[114.945686,25.831635],address:'江西省赣州市章贡区'},
+            {name:'赣州市爱民诊所(五洲大道)',coords:[114.95976,25.823556],address:'江西省赣州市章贡区沙河镇五洲大道25-6号'},
+            {name:'赣州市崇义县崇义县中山医院',coords:[114.30926,25.693329],address:'江西省赣州市崇义县横水镇中山南路82号'},
+            {name:'赣州市大余第二医院',coords:[114.624986,25.53232],address:'江西省赣州市大余县新城镇新城大道66号'},
+            {name:'赣州市大余县池江镇卫生院',coords:[114.56514,25.488178],address:'江西省赣州市大余县伯坚大道大余县池江派出所东北侧约280米'},
+            {name:'赣州市大余县人民医院',coords:[114.36492,25.39601],address:'江西省赣州市大余县人民路4号'},
+            {name:'赣州市赣南医科大学第一附属医院',coords:[114.932846,25.855663],address:'江西省赣州市章贡区青年路23号'},
+            {name:'赣州市均村乡东方村公办卫生所',coords:[115.0893,26.40366],address:'江西省赣州市兴国县均村乡东方村'},
+            {name:'赣州市南水社区卫生服务中心',coords:[114.761491,25.650486],address:'江西省赣州市南康区东山街道南水大道与南平路交叉路口南侧(巴黎大厦东侧约50米)'},
+            {name:'赣州市清江花园西北门 校卫生室',coords:[114.932049,25.860794],address:'江西省赣州市章贡区西郊路1号清江花园'},
+            {name:'赣州市人民医院(新院)门诊',coords:[114.94746,25.81209],address:'江西省赣州市章贡区梅关大道18号'},
+            {name:'赣州市瑞金市人民医院-西北门',coords:[116.035859,25.874058],address:'江西省赣州市瑞金市平安巷与红都大道交叉口正东方向63米左右'},
+            {name:'赣州市于都县蔬菜场村卫生所',coords:[115.407182,25.953668],address:'江西省赣州市于都县贡江镇汽车站对面'},
+
+            //邯郸市
+            {name:'邯郸市馆陶县人民医院',coords:[115.30292,36.53789],address:'河北省邯郸市馆陶县文卫街31号'},
+            {name:'邯郸市馆陶县中医医院(政府街)',coords:[115.276676,36.541531],address:'河北省邯郸市馆陶县政府街211号'},
+            {name:'邯郸市徐村卫生院',coords:[114.628401,36.388081],address:'河北省邯郸市成安县四清路与平安街交叉口东北方向40米左右'},
+
+            //郑州市
+            {name:'郑州市二七区佑生堂门诊部',coords:[113.661803,34.723042],address:'河南省郑州市二七区新圃街18号'},
+            {name:'郑州市二七徐流红诊所(万达广场店)',coords:[113.641212,34.716683],address:'河南省郑州市二七区长江路街道大学南路8号二七万达2号院西门南五十米'},
+            {name:'郑州市二七照海诊所',coords:[113.664889,34.723539],address:'河南省郑州市二七区'},
+
+            //鄂尔多斯市
+            {name:'鄂尔多斯市鄂托克前旗人民医院',coords:[107.481761,38.189959],address:'内蒙古自治区鄂尔多斯市鄂托克前旗沙日塔拉东街'},
+
+            //重庆市
+            {name:'重庆市昌碧诊所',coords:[106.482592,29.608368],address:'重庆市两江新区石马河街道金科10年城·东区西南门北70米'},
+            {name:'重庆市凤来镇卫生院',coords:[107.302761,29.396753],address:'重庆市武隆区凤来乡中心'},
+            {name:'重庆市光国村卫生室',coords:[106.640801,29.467716],address:'重庆市巴南区南泉街道华林路凤华康城'},
+            {name:'重庆市石柱县人民医院',coords:[108.111884,29.981463],address:'重庆市石柱土家族自治县都督大道29号'},
+            {name:'重庆市石柱县人民医院',coords:[108.111884,29.981463],address:'重庆市石柱土家族自治县都督大道29号'},
+
+            //银川市
+            {name:'银川市第二人民医院',coords:[106.184816,38.48435],address:'宁夏回族自治区银川市金凤区北京中路684号'},
+
+            //镇江市
+            {name:'镇江市江苏省丹阳市中医院',coords:[119.587549,31.992147],address:'江苏省镇江市丹阳市云阳路38号'},
+
+            //阜阳市
+            {name:'阜阳市第五人民医院新院区',coords:[115.816195,32.927707],address:'安徽省阜阳市颍泉区太和路227号'},
+            {name:'阜阳市颍上县江口镇第二人民医院',coords:[116.208467,32.786478],address:'安徽省阜阳市颍上县育才路与颍江路交叉口东北方向180米左右'},
+
+            //阿拉尔市
+            {name:'新疆阿拉尔市浙江大学医学院附属邵逸夫医院新疆兵团阿拉尔医院(国家区域医疗中心)',coords:[81.296076,40.583571],address:'新疆维吾尔自治区阿拉尔市复兴大道东1201号'},
+
+            //高安市
+            {name:'高安市灰埠镇锦江村金家村',coords:[115.23256,28.303521],address:'江西省高安市灰埠镇锦江村金家村'},
+            {name:'高安市石脑镇石脑卫生院',coords:[115.305371,28.397493],address:'江西省高安市石脑镇'},
+
+            //鹰潭市
+            {name:'鹰潭市人民医院',coords:[117.030881,28.243001],address:'江西省鹰潭市月湖区交通街道胜利西路116号'},
+            {name:'鹰潭市万福家天下(天洁西路)',coords:[117.019144,28.228487],address:'江西省鹰潭市月湖区白露街道天洁西路2号(创景路与天洁西路交叉路口往东北约140米)'},
+            {name:'鹰潭市悦澜湾营销部附近吴爱兵诊所',coords:[117.087848,28.271888],address:'江西省鹰潭市悦澜湾附近'}
+        ];
+
+        // 在地图上显示医院位置（使用聚合）
+        function addMarkers() {
+            try {
+                // 清除旧标记和聚合
+                if (cluster) {
+                    cluster.setMap(null);
+                }
+                markers.forEach(function(marker) {
+                    marker.setMap(null);
+                });
+                markers = [];
+
+                locations.forEach(function(location) {
+                    var marker = new AMap.Marker({
+                        position: location.coords,
+                        title: location.name,
+                        cursor: 'pointer',
+                        extData: location // 存储完整的位置信息
+                    });
+
+                    // 点击标记显示信息窗口
+                    marker.on('click', function(e) {
+                        var loc = e.target.getExtData();
+                        var addressHtml = loc.address ? '<div style="margin-top: 4px; color: #999; font-size: 11px;">' + loc.address + '</div>' : '';
+                        var content = '<div style="padding: 12px; min-width: 200px;">' +
+                            '<strong style="font-size: 15px; color: #333;">' + loc.name + '</strong>' +
+                            addressHtml +
+                            '<div style="margin-top: 8px; color: #666; font-size: 13px;">' +
+                            '</div>' +
+                            '<div style="margin-top: 10px; display: flex; gap: 8px;">' +
+                            '<a href="https://uri.amap.com/marker?position=' + loc.coords[0] + ',' + loc.coords[1] + '&name=' + encodeURIComponent(loc.name) + '" target="_blank" style="padding: 6px 12px; background: #dc3545; color: white; text-decoration: none; border-radius: 4px; font-size: 12px;">高德导航</a>' +
+                            '<a href="https://api.map.baidu.com/marker?location=' + loc.coords[1] + ',' + loc.coords[0] + '&title=' + encodeURIComponent(loc.name) + '&coord_type=gcj02&output=html" target="_blank" style="padding: 6px 12px; background: #4285f4; color: white; text-decoration: none; border-radius: 4px; font-size: 12px;">百度导航</a>' +
+                            '</div>' +
+                            '</div>';
+                        infoWindow.setContent(content);
+                        infoWindow.open(map, loc.coords);
+                    });
+
+                    markers.push(marker);
+                });
+
+                // 创建标记聚合
+                cluster = new AMap.MarkerCluster(map, markers, {
+                    gridSize: 80,
+                    renderClusterMarker: function(context) {
+                        var count = context.count;
+                        var div = document.createElement('div');
+                        var bgColor = count < 10 ? '#dc3545' : count < 50 ? '#ff6b6b' : '#ff8787';
+                        div.style.cssText = 'background-color:' + bgColor + '; color: white; border: 2px solid white; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-weight: bold; box-shadow: 0 2px 6px rgba(0,0,0,0.3);';
+                        div.innerHTML = count;
+                        context.marker.setContent(div);
+                        context.marker.setOffset(new AMap.Pixel(-20, -20));
+                    }
+                });
+                
+                performanceData.markersLoaded = true;
+                console.log('标记加载完成，共 ' + locations.length + ' 个');
+            } catch (error) {
+                console.error('标记加载失败:', error);
+                document.getElementById('nearestLocation').innerHTML = 
+                    '<span style="color: #dc3545;">标记加载失败，请刷新页面重试</span>';
+            }
+        }
+
+        // 处理地点搜索输入
+        function handleLocationInput() {
+            clearTimeout(searchTimeout);
+            var keyword = document.getElementById('locationSearch').value.trim();
+            
+            if (keyword.length < 2) {
+                document.getElementById('searchSuggestions').classList.remove('active');
+                return;
+            }
+            
+            searchTimeout = setTimeout(function() {
+                autoComplete.search(keyword, function(status, result) {
+                    if (status === 'complete' && result.tips && result.tips.length > 0) {
+                        showSuggestions(result.tips);
+                    } else {
+                        document.getElementById('searchSuggestions').classList.remove('active');
+                    }
+                });
+            }, 300);
+        }
+        
+        // 显示搜索建议
+        function showSuggestions(tips) {
+            var suggestionsDiv = document.getElementById('searchSuggestions');
+            var html = '';
+            
+            tips.forEach(function(tip) {
+                if (tip.location) { // 只显示有坐标的结果
+                    html += '<div class="suggestion-item" onclick="selectLocation(\'' + 
+                        tip.name.replace(/'/g, "\\'") + '\', ' + 
+                        tip.location.lng + ', ' + 
+                        tip.location.lat + ', \'' + 
+                        (tip.address || '').replace(/'/g, "\\'") + '\')">' +
+                        '<strong>' + tip.name + '</strong>' +
+                        '<span>' + (tip.district || '') + ' ' + (tip.address || '') + '</span>' +
+                        '</div>';
+                }
+            });
+            
+            if (html) {
+                suggestionsDiv.innerHTML = html;
+                suggestionsDiv.classList.add('active');
+            } else {
+                suggestionsDiv.classList.remove('active');
+            }
+        }
+        
+        // 选择地点
+        function selectLocation(name, lng, lat, address) {
+            document.getElementById('locationSearch').value = name;
+            document.getElementById('searchSuggestions').classList.remove('active');
+            
+            var position = [lng, lat];
+            
+            // 移除旧的搜索标记
+            if (searchMarker) {
+                searchMarker.setMap(null);
+            }
+            
+            // 添加新的搜索标记
+            searchMarker = new AMap.Marker({
+                position: position,
+                map: map,
+                title: name,
+                icon: new AMap.Icon({
+                    size: new AMap.Size(30, 40),
+                    image: '//a.amap.com/jsapi_demos/static/demo-center/icons/poi-marker-red.png',
+                    imageSize: new AMap.Size(30, 40)
+                }),
+                zIndex: 2000,
+                label: {
+                    content: '<div style="background: #dc3545; color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px; white-space: nowrap;">' + name + '</div>',
+                    offset: new AMap.Pixel(0, -45)
+                }
+            });
+            
+            // 移动地图到该位置
+            map.setZoomAndCenter(15, position, true);
+            
+            // 显示附近的诊所
+            displayDistances(position);
+            
+            // 显示信息窗口
+            setTimeout(function() {
+                var content = '<div style="padding: 12px; min-width: 200px;">' +
+                    '<strong style="font-size: 15px; color: #dc3545;">📍 ' + name + '</strong><br>' +
+                    '<div style="margin-top: 8px; color: #666; font-size: 13px;">' + address + '</div>' +
+                    '<div style="margin-top: 10px; color: #999; font-size: 12px;">正在显示附近的诊所...</div>' +
+                    '</div>';
+                infoWindow.setContent(content);
+                infoWindow.open(map, position);
+            }, 500);
+        }
+        
+        // 搜索当前输入的地点
+        function searchCurrentLocation() {
+            var keyword = document.getElementById('locationSearch').value.trim();
+            
+            if (!keyword) {
+                alert('请输入地址或地点名称');
+                return;
+            }
+            
+            // 隐藏建议列表
+            document.getElementById('searchSuggestions').classList.remove('active');
+            
+            // 显示加载状态
+            document.getElementById('nearestLocation').innerHTML = 
+                '<span style="color: #666;">🔍 正在搜索 "' + keyword + '"...</span>';
+            
+            // 先尝试地点搜索
+            placeSearch.search(keyword, function(status, result) {
+                if (status === 'complete' && result.poiList && result.poiList.pois.length > 0) {
+                    var poi = result.poiList.pois[0];
+                    selectLocation(poi.name, poi.location.lng, poi.location.lat, poi.address || poi.district);
+                } else {
+                    // 如果地点搜索失败，尝试地理编码
+                    geocoder.getLocation(keyword, function(status, result) {
+                        if (status === 'complete' && result.geocodes && result.geocodes.length > 0) {
+                            var geocode = result.geocodes[0];
+                            selectLocation(
+                                geocode.formattedAddress, 
+                                geocode.location.lng, 
+                                geocode.location.lat, 
+                                geocode.formattedAddress
+                            );
+                        } else {
+                            document.getElementById('nearestLocation').innerHTML = 
+                                '<span style="color: #dc3545;">❌ 未找到 "' + keyword + '"，请尝试其他关键词</span>';
+                        }
+                    });
+                }
+            });
+        }
+        
+        // 处理回车键搜索
+        function handleLocationKeyPress(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                searchCurrentLocation();
+            }
+        }
+        
+        // 点击页面其他地方关闭建议列表
+        document.addEventListener('click', function(e) {
+            var locationSearch = document.getElementById('locationSearch');
+            var suggestions = document.getElementById('searchSuggestions');
+            
+            if (e.target !== locationSearch && !suggestions.contains(e.target)) {
+                suggestions.classList.remove('active');
+            }
+        });
+
+        // 搜索功能（优化版 - 诊所名称搜索）
+        // 改变城市的中心点（已废弃，使用selectCity代替）
+        function changeCity() {
+            // 这个函数保留以防万一，但实际使用selectCity
+            selectCity(currentSelectedCity);
+        }
+
+        // ========== 移动端功能 ==========
+        
+        // 打开移动端菜单
+        function openMobileMenu() {
+            document.getElementById('mobileSidebar').classList.add('active');
+            document.getElementById('mobileOverlay').classList.add('active');
+            document.body.style.overflow = 'hidden'; // 防止背景滚动
+        }
+        
+        // 关闭移动端菜单
+        function closeMobileMenu() {
+            document.getElementById('mobileSidebar').classList.remove('active');
+            document.getElementById('mobileOverlay').classList.remove('active');
+            document.body.style.overflow = ''; // 恢复滚动
+        }
+        
+        // 地图折叠/展开功能
+        var mapExpanded = false;
+        function toggleMapSize() {
+            var mapContainer = document.getElementById('mapContainer');
+            var toggleBtn = document.getElementById('mapToggleBtn');
+            
+            mapExpanded = !mapExpanded;
+            
+            if (mapExpanded) {
+                mapContainer.classList.remove('map-collapsed');
+                mapContainer.classList.add('map-expanded');
+                // 更新按钮的多语言属性
+                toggleBtn.setAttribute('data-zh', '👇 点击收起地图');
+                toggleBtn.setAttribute('data-en', '👇 Tap to collapse map');
+            } else {
+                mapContainer.classList.remove('map-expanded');
+                mapContainer.classList.add('map-collapsed');
+                // 更新按钮的多语言属性
+                toggleBtn.setAttribute('data-zh', '👆 点击展开地图');
+                toggleBtn.setAttribute('data-en', '👆 Tap to expand map');
+            }
+            
+            // 使用i18n更新UI，保持当前语言
+            if (window.i18n) {
+                window.i18n.updateUI();
+            } else {
+                // 如果i18n未加载，直接更新文本
+                toggleBtn.textContent = toggleBtn.getAttribute('data-zh');
+            }
+            
+            // 触发地图重绘
+            setTimeout(function() {
+                if (map) {
+                    map.setFitView();
+                }
+            }, 400); // 等待动画完成
+        }
+        
+        // 处理地图点击 - 折叠状态下点击展开
+        function handleMapClick(event) {
+            // 检查是否是移动端且地图处于折叠状态
+            var isMobile = window.innerWidth <= 768;
+            if (isMobile && !mapExpanded) {
+                // 排除点击按钮的情况
+                if (!event.target.closest('.map-control-btn') && !event.target.closest('.map-toggle-btn')) {
+                    toggleMapSize();
+                }
+            }
+        }
+        
+        // Accordion折叠/展开功能
+        function toggleAccordion(header) {
+            var item = header.parentElement;
+            var wasActive = item.classList.contains('active');
+            
+            // 关闭所有其他accordion项
+            var allItems = document.querySelectorAll('.info-accordion-item');
+            allItems.forEach(function(otherItem) {
+                if (otherItem !== item) {
+                    otherItem.classList.remove('active');
+                }
+            });
+            
+            // 切换当前项
+            if (wasActive) {
+                item.classList.remove('active');
+            } else {
+                item.classList.add('active');
+            }
+        }
+        
+        // 检测屏幕尺寸变化，自动调整显示
+        var resizeTimer;
+        window.addEventListener('resize', function() {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(function() {
+                var isMobile = window.innerWidth <= 768;
+                
+                if (!isMobile) {
+                    // 桌面端：移除折叠状态
+                    var mapContainer = document.getElementById('mapContainer');
+                    mapContainer.classList.remove('map-collapsed');
+                    mapContainer.classList.remove('map-expanded');
+                    mapExpanded = false;
+                    closeMobileMenu();
+                } else {
+                    // 移动端：应用折叠状态
+                    var mapContainer = document.getElementById('mapContainer');
+                    if (!mapExpanded && !mapContainer.classList.contains('map-collapsed')) {
+                        mapContainer.classList.add('map-collapsed');
+                    }
+                }
+                
+                // 触发地图重绘
+                if (map) {
+                    setTimeout(function() {
+                        map.setFitView();
+                    }, 100);
+                }
+            }, 250);
+        });
+        
+        // 页面加载时初始化移动端状态
+        window.addEventListener('load', function() {
+            var isMobile = window.innerWidth <= 768;
+            if (isMobile) {
+                // 移动端默认折叠地图
+                var mapContainer = document.getElementById('mapContainer');
+                mapContainer.classList.add('map-collapsed');
+                mapExpanded = false;
+            }
+        });
+        // 计算用户到医院的距离并排序
+        function calculateDistances(userCoords) {
+            var distances = [];
+            locations.forEach(function(location) {
+                var distance = AMap.GeometryUtil.distance(userCoords, location.coords);
+                distances.push({ 
+                    name: location.name, 
+                    distance: distance,
+                    coords: location.coords,
+                    address: location.address
+                });
+            });
+            distances.sort(function(a, b) {
+                return a.distance - b.distance;
+            });
+            return distances;
+        }
+
+        // 显示计算后的距离（只显示最近的20个）
+        function displayDistances(userCoords) {
+            var distances = calculateDistances(userCoords);
+            var nearest = distances[0];
+            
+            var nearestAddressHtml = nearest.address ? '<br><span style="color: #999; font-size: 11px;">' + nearest.address + '</span>' : '';
+            
+            // 显示最近的诊所
+            document.getElementById('nearestLocation').innerHTML = 
+                '<div style="display: flex; align-items: center; gap: 10px;">' +
+                '<span style="font-size: 24px;">🏥</span>' +
+                '<div>' +
+                '<strong style="display: block; margin-bottom: 4px;">' + nearest.name + '</strong>' +
+                nearestAddressHtml +
+                '<span style="color: #666; font-size: 13px;">距离: ' + (nearest.distance / 1000).toFixed(2) + ' km</span>' +
+                '</div>' +
+                '</div>';
+            
+            var listHTML = '';
+            var displayCount = Math.min(20, distances.length);
+            
+            // 统计信息
+            var within5km = distances.filter(function(d) { return d.distance <= 5000; }).length;
+            var within10km = distances.filter(function(d) { return d.distance <= 10000; }).length;
+            
+            if (within5km > 0 || within10km > 0) {
+                listHTML += '<li style="background: #f0f9ff; border-left: 3px solid #4285f4; padding: 10px; margin-bottom: 10px; border-radius: 4px; cursor: default;">' +
+                    '<strong>统计信息</strong><br>' +
+                    '<span style="font-size: 13px; color: #666;">' +
+                    '5公里内: ' + within5km + ' 个 | ' +
+                    '10公里内: ' + within10km + ' 个' +
+                    '</span>' +
+                    '</li>';
+            }
+            
+            for (var i = 0; i < displayCount; i++) {
+                var item = distances[i];
+                var distanceKm = (item.distance / 1000).toFixed(2);
+                var distanceClass = item.distance <= 5000 ? 'style="color: #28a745;"' : 
+                                   item.distance <= 10000 ? 'style="color: #ffc107;"' : '';
+                var addressHtml = item.address ? '<br><span style="font-size: 11px; color: #999;">' + item.address + '</span>' : '';
+                
+                listHTML += '<li onclick="focusMarker(' + item.coords[0] + ',' + item.coords[1] + ',\'' + 
+                    item.name.replace(/'/g, "\\'") + '\')" style="cursor: pointer; position: relative; padding-left: 25px;">' +
+                    '<span style="position: absolute; left: 5px; top: 12px;">' + (i + 1) + '.</span>' +
+                    '<div>' +
+                    '<strong>' + item.name + '</strong>' +
+                    addressHtml +
+                    '<br><span ' + distanceClass + ' style="font-size: 13px;">' + distanceKm + ' km</span>' +
+                    '</div>' +
+                    '</li>';
+            }
+            
+            if (distances.length > displayCount) {
+                listHTML += '<li style="color: #999; font-style: italic; text-align: center; cursor: default; padding: 15px;">' +
+                    '还有 ' + (distances.length - displayCount) + ' 个诊所未显示<br>' +
+                    '</li>';
+            }
+            
+            document.getElementById('distanceUl').innerHTML = listHTML;
+        }
+
+        // 聚焦到指定标记（优化版）
+        function focusMarker(lng, lat, name) {
+            var position = [lng, lat];
+            map.setZoomAndCenter(16, position, true);
+            
+            // 延迟显示信息窗口，等待地图移动完成
+            setTimeout(function() {
+                var location = locations.find(function(loc) {
+                    return loc.coords[0] === lng && loc.coords[1] === lat;
+                });
+                
+                if (location) {
+                    var addressHtml = location.address ? '<div style="margin-top: 4px; color: #999; font-size: 11px;">' + location.address + '</div>' : '';
+                    var content = '<div style="padding: 12px; min-width: 200px;">' +
+                        '<strong style="font-size: 15px; color: #333;">' + name + '</strong>' +
+                        addressHtml +
+                        '<div style="margin-top: 8px; color: #666; font-size: 13px;">' +
+                        '</div>' +
+                        '<div style="margin-top: 10px; display: flex; gap: 8px;">' +
+                        '<a href="https://uri.amap.com/marker?position=' + lng + ',' + lat + '&name=' + encodeURIComponent(name) + '" target="_blank" style="padding: 6px 12px; background: #dc3545; color: white; text-decoration: none; border-radius: 4px; font-size: 12px;">高德导航</a>' +
+                        '<a href="https://api.map.baidu.com/marker?location=' + lat + ',' + lng + '&title=' + encodeURIComponent(name) + '&coord_type=gcj02&output=html" target="_blank" style="padding: 6px 12px; background: #4285f4; color: white; text-decoration: none; border-radius: 4px; font-size: 12px;">百度导航</a>' +
+                        '</div>' +
+                        '</div>';
+                    infoWindow.setContent(content);
+                    infoWindow.open(map, position);
+                }
+            }, 500);
+        }
+
+        // 获取用户的地理位置
+        var userMarker = null;
+        var userPosition = null;
+        
+        function getUserLocation() {
+            navigator.geolocation.getCurrentPosition(
+                function(position) {
+                    userPosition = [position.coords.longitude, position.coords.latitude];
+                    map.setZoomAndCenter(13, userPosition, true);
+                    
+                    // 添加用户位置标记
+                    if (userMarker) {
+                        userMarker.setMap(null);
+                    }
+                    
+                    userMarker = new AMap.Marker({
+                        position: userPosition,
+                        map: map,
+                        title: '您的位置',
+                        icon: new AMap.Icon({
+                            size: new AMap.Size(25, 34),
+                            image: '//a.amap.com/jsapi_demos/static/demo-center/icons/poi-marker-default.png',
+                            imageSize: new AMap.Size(25, 34)
+                        }),
+                        zIndex: 1000
+                    });
+                    
+                    displayDistances(userPosition);
+                },
+                function(error) {
+                    console.error("无法获取用户位置: ", error);
+                    
+                    // 使用更友好的提示
+                    var errorMsg = "无法获取您的位置";
+                    if (error.code === 1) {
+                        errorMsg += "，请允许浏览器访问位置信息";
+                    } else if (error.code === 2) {
+                        errorMsg += "，位置信息不可用";
+                    } else if (error.code === 3) {
+                        errorMsg += "，请求超时";
+                    }
+                    
+                    document.getElementById('nearestLocation').innerHTML = 
+                        '<span style="color: #dc3545;">' + errorMsg + '，已使用默认城市</span>';
+
+                    // 默认使用选择的城市中心来排序
+                    var city = document.getElementById('city').value;
+                    var cityCenter = getCityCenter(city);
+                    map.setZoomAndCenter(12, cityCenter, true);
+                    displayDistances(cityCenter);
+                }
+            );
+        }
+        
+        // 返回用户位置
+        function relocateUser() {
+            if (userPosition) {
+                map.setZoomAndCenter(13, userPosition, true);
+                displayDistances(userPosition);
+            } else {
+                getUserLocation();
+            }
+        }
+        
+        getUserLocation();
+
+        // 获取城市的中心坐标
+        function getCityCenter(city) {
+            var cityCenters = {
+                '上海市':[121.551003,30.875373],
+                '上饶市':[117.671295,28.598446],
+                '东莞市':[114.175108,22.840663],
+                '东营市':[118.588463,37.454847],
+                '丰城市':[115.798108,28.204349],
+                '临沂市':[118.439736,35.048406],
+                '乌鲁木齐市':[87.579393,43.828178],
+                '九江市':[115.106085,29.261147],
+                '五家渠市':[87.562417,44.193087],
+                '南宁市':[107.476866,23.188109],
+                '南昌市':[116.020745,28.721593],
+                '厦门市':[118.131472,24.711866],
+                '合肥市':[117.212314,31.790378],
+                '吉安市':[114.597918,27.268891],
+                '哈密市':[93.520996,42.830462],
+                '唐山市':[118.088869,39.567739],
+                '塔城市':[82.992735,46.747808],
+                '天津市':[117.307704,39.718903],
+                '宁德市':[119.638888,27.028417],
+                '宜春市':[115.80061,28.159617],
+                '宿州市':[116.983076,33.630342],
+                '巴彦淖尔市':[107.409235,40.775456],
+                '巴音郭楞蒙古自治州':[86.150024,41.760954],
+                '常州市':[119.913412,31.83565],
+                '平凉市':[106.706837,35.534559],
+                '成都市':[103.910147,30.80591],
+                '抚州市':[116.014285,27.863724],
+                '新余市':[114.680005,27.809928],
+                '无锡市':[120.230856,31.599601],
+                '昌吉回族自治州':[81.263434,43.94172],
+                '昌吉市':[87.307529,44.021176],
+                '景德镇市':[117.206896,29.285737],
+                '杭州市':[120.385664,30.290726],
+                '株洲市':[113.163282,27.834939],
+                '梅州市':[115.792651,23.926312],
+                '梧州市':[111.249955,23.488776],
+                '武汉市':[114.332,30.577],
+                '沧州市':[117.498155,38.157041],
+                '济南市':[117.673952,36.244514],
+                '淄博市':[118.049615,36.85915],
+                '淮安市':[119.029299,33.586717],
+                '深圳市':[113.914503,22.561882],
+                '温州市':[120.587791,28.060655],
+                '湖州市':[120.133526,30.884995],
+                '盐城市':[120.176999,32.800147],
+                '石河子市':[86.05993,44.298121],
+                '福州市':[119.556669,25.862381],
+                '菏泽市':[115.125786,35.295306],
+                '萍乡市':[113.89119,27.612579],
+                '西宁市':[101.762601,36.685418],
+                '赣州市':[114.315805,25.699118],
+                '邯郸市':[115.30292,36.53789],
+                '郑州市':[113.661803,34.723042],
+                '鄂尔多斯市':[107.481761,38.189959],
+                '重庆市':[106.482592,29.608368],
+                '银川市':[106.184816,38.48435],
+                '镇江市':[119.587549,31.992147],
+                '阜阳市':[115.816195,32.927707],
+                '阿拉尔市':[81.296076,40.583571],
+                '高安市':[115.23256,28.303521],
+                '鹰潭市':[117.030881,28.243001],
+            };
+            return cityCenters[city] || [116.397, 39.916]; // 默认北京坐标
+        }
+
+        // 初始化医院标记
+        addMarkers();
+        
+        // 初始化城市选择器
+        document.getElementById('cityInput').value = currentSelectedCity;
+        
+        // 键盘快捷键
+        document.addEventListener('keydown', function(e) {
+            // Ctrl/Cmd + F 或 Ctrl/Cmd + K: 聚焦地点搜索框
+            if ((e.ctrlKey || e.metaKey) && (e.key === 'f' || e.key === 'k')) {
+                e.preventDefault();
+                document.getElementById('locationSearch').focus();
+            }
+            // Escape: 清空搜索或关闭Modal
+            if (e.key === 'Escape') {
+                if (document.getElementById('cityModalOverlay').classList.contains('active')) {
+                    closeCitySelector();
+                } else {
+                    document.getElementById('locationSearch').value = '';
+                    document.getElementById('searchSuggestions').classList.remove('active');
+                }
+            }
+            // Ctrl/Cmd + L: 返回我的位置
+            if ((e.ctrlKey || e.metaKey) && e.key === 'l') {
+                e.preventDefault();
+                relocateUser();
+            }
+        });
+        
+        // 添加无障碍支持
+        document.getElementById('locationSearch').setAttribute('aria-label', '搜索地点');
+        document.getElementById('cityInput').setAttribute('aria-label', '选择城市');
+    </script>
+</body>
+</html>
